@@ -1,11 +1,11 @@
 class Usuario
 {
-    constructor(nombre,apellido,libros,mascotas)
+    constructor(nombre,apellido)
     {
         this.nombre = nombre
         this.apellido = apellido
-        this.libros = libros
-        this.mascotas = mascotas
+        this.libros = []
+        this.mascotas = []
     }
 
     //Retorna el nombre completo del usuario.
@@ -42,7 +42,7 @@ class Usuario
 
 //----------------------------------------------------------------------------------------
 
-const primerUsuario = new Usuario('gabriel','paez',[],[])
+const primerUsuario = new Usuario('gabriel','paez')
 console.log('usuario: ' + primerUsuario.getFullName())
 primerUsuario.addMascota('perro')
 primerUsuario.addMascota('gato')
