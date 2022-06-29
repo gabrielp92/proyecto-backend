@@ -12,7 +12,7 @@ const contenedor = new Contenedor('productos.txt');
 
 const express = require('express')
 const app = express()
-const PORT = 8080
+const PORT = process.env.PORT || 8080
 
 app.get('/productos', (request,response) => {
     response.send(contenedor.getAll())
