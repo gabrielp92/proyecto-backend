@@ -75,6 +75,7 @@ class Contenedor {
 
     readFile()
     {
+        //return fs.promises.readFile(`../uploads/${this.filename}`,'utf-8')
         return fs.promises.readFile(this.filename,'utf-8')
             .then(data => JSON.parse(data))
             .catch(() => '')
