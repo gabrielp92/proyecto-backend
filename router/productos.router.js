@@ -1,12 +1,10 @@
 const Contenedor = require('../Contenedor');
 let contenedor = new Contenedor('productos.txt');
 (async function(){
-    console.log('desde productos.router')
     await contenedor.init()
 })();
 
 /*********************************************************/
-
 const express = require('express')
 const { Router } = express
 const routerProducts = Router()
@@ -29,11 +27,9 @@ routerProducts.get('/:id', (request, response) =>  {
 routerProducts.post('/', (request,response) => {
    
     console.log('POST recibido');
-
     (async function(){
         await contenedor.save(request.body)
     })();
-
     response.json(contenedor.getAll()[contenedor.getAll().length-1])
 })
 
@@ -67,4 +63,7 @@ routerProducts.delete('/:id', (request,response) => {
     response.json()
 })
 
-module.exports = routerProducts
+module.exports = {
+    contenedor : contenedor,
+    routerProducts : routerProducts
+}

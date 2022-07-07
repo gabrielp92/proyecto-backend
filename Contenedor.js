@@ -14,7 +14,7 @@ class Contenedor {
         try {
             const data = await this.readFile()
             if(data.length > 0) {
-                this.products = data
+                this.products = this.products.concat(data)
                 this.products.map( (p,index) => (!p.hasOwnProperty('id')) ? p.id = index + 1 : p.id)
                 this.nextID = this.products[data.length-1].id + 1    
                 await this.saveFile()
@@ -28,17 +28,12 @@ class Contenedor {
     async save(product)
     {
         if(this.products.length > 0) {
-
-            console.log(this.products.length)
-
             this.nextID = this.products[this.products.length-1].id + 1
-        }
-        
+        }   
         product.id = this.nextID
         this.products.push(product)
-       // this.nextID++
         try{
-            await this.appendFile()
+            await this.saveFile()
         } catch(error) {
             console.log(error)
         }
@@ -89,18 +84,10 @@ class Contenedor {
             .catch(() => '')
     }
 
-    appendFile()
-    {
-        return fs.promises.appendFile(`./uploads/${this.filename}`, JSON.stringify(this.products))
-       //return fs.promises.writeFile(`./uploads/${this.filename}`, JSON.stringify(this.products), {flag: 'a+'})
-    }
-
     saveFile()
     {
-       // return fs.promises.appendFile(`./uploads/${this.filename}`, JSON.stringify(this.products))
         return fs.promises.writeFile(`./uploads/${this.filename}`, JSON.stringify(this.products))
     }
-
 }
 
 module.exports = Contenedor
