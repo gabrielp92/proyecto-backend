@@ -1,8 +1,13 @@
-const Contenedor = require('./js/Contenedor');
+const Contenedor = require('./Contenedor');
+/*
+let contenedor = new Contenedor('productos.txt');
+(async function(){
+    await contenedor.init()
+})();*/
 
 const express = require('express')
 const multer = require('multer')
-const routerProducts = require('./router/productos.router')
+const routerProducts  = require('./router/productos.router')
 const app = express()
 const PORT = process.env.PORT || 8080
 app.use(express.json())
@@ -18,9 +23,7 @@ app.use((err,req,res,next) => {
 // configuración de multer
 const storage = multer.diskStorage({
     destination: (req, file, cb) => cb(null, 'uploads'),
-
-    filename: (req, file, cb) => cb(null, file.fieldname)
-    //filename: (req, file, cb) => cb(null, file.fieldname + '-' + Date.now())
+    filename: (req, file, cb) => cb(null, file.originalname)
 })
 const upload = multer({storage})
 
@@ -40,12 +43,12 @@ app.post('/uploadfile', upload.single('productos'), (req, res, next) => {
 
     //Se utiliza la clase Contenedor para que el archivo persista en memoria
     const contenedor = new Contenedor(req.file.originalname);
+    //contenedor = new Contenedor(req.file.originalname);
     (async function(){
+        console.log('desde server')
         await contenedor.init()
+        res.send(contenedor.getAll())
     })();
-    console.log(req.file.originalname);
-    console.log(contenedor.getAll())
-    res.send(contenedor.getAll())
 })
 
 const server = app.listen(PORT, () => {

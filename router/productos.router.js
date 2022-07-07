@@ -1,6 +1,7 @@
-const Contenedor = require('../js/Contenedor');
-const contenedor = new Contenedor('productos.txt');
+const Contenedor = require('../Contenedor');
+let contenedor = new Contenedor('productos.txt');
 (async function(){
+    console.log('desde productos.router')
     await contenedor.init()
 })();
 
