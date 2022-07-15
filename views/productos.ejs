@@ -17,7 +17,7 @@
                     <% if(productos.length == 0) { %>
                         <h3 class="p-3 text-white bg-secondary">No se encontraron productos</h3>
                     <% } else { %>
-                        <div class="table-responsive m-1">
+                        <div class="table-responsive">
                             <table class="text-white bg-dark text-center">
                                 <thead>
                                     <tr>
@@ -31,14 +31,16 @@
                                         <tr class="border border-secondary">
                                             <td class="p-4"><%= producto.title %></td>
                                             <td class="p-4"><%= producto.price %></td>
-                                            <td class="p-4"><%= producto.thumbnail %></td>
+                                            <td class="p-4">
+                                                <img src="<%= producto.thumbnail %>" alt="foto">
+                                            </td>
                                         </tr>
                                     <% }) %>
                                 </tbody>
                             </table>
                         </div>
                     <% } %>
-                    <div class="d-flex mt-3 flex-column align-items-center">
+                    <div class="d-flex mt-3 flex-column align-items-start">
                         <button class="w-50 btn btn-success btn-md" type="button" onclick="location.href='/'">Cargar Productos</button>
                     </div>
                 </div>
