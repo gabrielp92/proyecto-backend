@@ -14,7 +14,8 @@ class Contenedor {
         try {
             const data = await this.readFile()
             if(data.length > 0) {
-                this.products = this.products.concat(data)
+                //this.products = this.products.concat(data)
+                this.products = data
                 this.products.map( (p,index) => (!p.hasOwnProperty('id')) ? p.id = index + 1 : p.id)
                 this.nextID = this.products[data.length-1].id + 1    
                 await this.saveFile()

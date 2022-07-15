@@ -1,48 +1,35 @@
-const Contenedor = require('./Contenedor');
+const Contenedor = require('./Contenedor')
+const contenedor = new Contenedor('productos.json');
+(async function(){
+    await contenedor.init()
+})();
 const express = require('express')
-const multer = require('multer')
-const rout  = require('./router/productos.router');
 const app = express()
 const PORT = process.env.PORT || 8080
+app.set('views', './views')
+app.set('view engine', 'ejs')
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
-app.use('/api/productos', rout.routerProducts)
-app.use('/static', express.static(__dirname + '/public'))
 app.use('/uploads', express.static('uploads'))
 app.use((err,req,res,next) => {
     console.error(err)
     res.status(500).send('Hubo algún error')
 })
-
-// configuración de multer
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => cb(null, 'uploads'),
-    filename: (req, file, cb) => cb(null, 'productos.txt')
-})
-const upload = multer({storage})
-
 /***************************************/
 
-app.get('/', (req,res) => {
-    res.sendFile(__dirname + '/public/index.html')
+app.get('/', (req,res) => res.sendFile(__dirname + '/views/form.html'))
+
+app.get('/productos', (req,res) => {
+
+    const mensaje = 'Vista de Productos'
+    const productos = contenedor.getAll()
+    res.render('productos', { productos , mensaje })
 })
 
-app.post('/uploadfile', upload.single('productos'), (req, res, next) => {
-    const file = req.file
-    if(!file) {
-        const error = new Error('Por favor, cargue el archivo')
-        error.httpStatusCode = 400
-        return next(error)
-    }
-
-    //Se utiliza la clase Contenedor para que el archivo persista en memoria
-    if(rout.contenedor == null)  
-        rout.contenedor = new Contenedor(req.file.filename);
-    
-    (async function(){
-        await rout.contenedor.init()
-        res.send(rout.contenedor.getAll())
-    })();
+app.post('/productos', (req, res) => {   
+    contenedor.save(req.body)
+        .then( () => res.redirect('/'))
+        .catch( () => res.send('Error to save'))
 })
 
 const server = app.listen(PORT, () => {
