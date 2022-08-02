@@ -1,11 +1,13 @@
 const fs = require('fs')
 
-class Contenedor {
+class ContenedorCarrito {
 
     constructor(filename)
     {
         this.filename = filename
         this.products = []
+        this.timestamp = Date.now()
+        this.id =  Math.floor(Math.random() * (this.timestamp - 1) + 1)
         this.nextID = 1
     }
 
@@ -41,15 +43,31 @@ class Contenedor {
         return product.id
     }
 
+    getIdCarrito()
+    {
+        return this.id
+    }
+
     getById(id)
     {
         const product = this.products.find(p => p.id == id)
         return product ? product : null
     }
 
-    getAll()
+    getAll(id)
     {
-        return this.products
+        if(this.id == id) 
+            return this.products
+        else
+            console.log('Carrito no encontrado')
+    }
+
+    async clearCart(id)
+    {
+        if(this.id == id)
+            await this.deleteAll()
+        else
+            console.log('Error: Carrito no encontrado')
     }
 
     async deleteById(id)
@@ -87,8 +105,9 @@ class Contenedor {
 
     saveFile()
     {
-        return fs.promises.writeFile(`./uploads/${this.filename}`, JSON.stringify(this.products,null,2))
+        const dataToSave = { id:this.id, timestamp:this.timestamp, productos: this.products }
+        return fs.promises.writeFile(`./uploads/${this.filename}`, JSON.stringify(dataToSave,null,2))
     }
 }
 
-module.exports = Contenedor
+module.exports = ContenedorCarrito

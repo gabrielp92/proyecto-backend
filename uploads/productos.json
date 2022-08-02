@@ -1,1 +1,52 @@
-[{"title":"Calculadora","price":"138","thumbnail":"https://cdn3.iconfinder.com/data/icons/education-209/64/calculator-math-tool-school-128.png","id":1},{"title":"Libro","price":"894","thumbnail":"https://cdn3.iconfinder.com/data/icons/education-209/64/book-note-paper-school-128.png","id":2},{"title":"Manzana","price":"64","thumbnail":"https://cdn3.iconfinder.com/data/icons/education-209/64/apple-fruit-science-school-128.png","id":3}]
+[
+  {
+    "nombre": "Calculadora",
+    "descripcion": "Calculadora con muchas funciones",
+    "código": 9902001,
+    "stock": 30,
+    "precio": 138,
+    "foto": "https://cdn3.iconfinder.com/data/icons/education-209/64/calculator-math-tool-school-128.png",
+    "id": 1,
+    "timestamp": 1659052594703
+  },
+  {
+    "nombre": "Libro",
+    "descripcion": "Libro de matemática nivel secundario",
+    "código": 9902003,
+    "stock": 25,
+    "precio": 596,
+    "foto": "https://cdn3.iconfinder.com/data/icons/education-209/64/book-note-paper-school-128.png",
+    "id": 2,
+    "timestamp": 1659052737652
+  },
+  {
+    "nombre": "Libro",
+    "descripcion": "Libro de matemática nivel universitario",
+    "código": 90206439,
+    "stock": 65,
+    "precio": 874,
+    "foto": "https://cdn3.iconfinder.com/data/icons/education-209/64/book-note-paper-school-128.png",
+    "id": 3,
+    "timestamp": 1659053098588
+  },
+  {
+    "nombre": "Calculadora",
+    "descripcion": "Calculadora científica",
+    "código": 32902006,
+    "stock": 40,
+    "precio": 485,
+    "foto": "https://cdn3.iconfinder.com/data/icons/education-209/64/calculator-math-tool-school-128.png",
+    "id": 4,
+    "timestamp": 1659052594356
+  },
+  {
+    "nombre": "Manzana",
+    "descripcion": "una manzana de color verde",
+    "código": 432079,
+    "stock": 325,
+    "precio": 776,
+    "foto": "https://cdn3.iconfinder.com/data/icons/education-209/64/apple-fruit-science-school-128.png",
+    "id": 5,
+    "timestamp": 1659408893064
+  }
+]
