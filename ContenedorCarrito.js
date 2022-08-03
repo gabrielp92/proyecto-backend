@@ -8,7 +8,7 @@ class ContenedorCarrito {
         this.products = []
         this.timestamp = Date.now()
         this.id =  Math.floor(Math.random() * (this.timestamp - 1) + 1)
-        this.nextID = 1
+      //  this.nextID = 1
     }
 
     async init()
@@ -17,8 +17,8 @@ class ContenedorCarrito {
             const data = await this.readFile()
             if(data.length > 0) {
                 this.products = data
-                this.products.map( (p,index) => (!p.hasOwnProperty('id')) ? p.id = index + 1 : p.id)
-                this.nextID = this.products[data.length-1].id + 1    
+               // this.products.map( (p,index) => (!p.hasOwnProperty('id')) ? p.id = index + 1 : p.id)
+              //  this.nextID = this.products[data.length-1].id + 1    
                 await this.saveFile()
             }
         } catch (error) {
@@ -29,10 +29,10 @@ class ContenedorCarrito {
 
     async save(product)
     {
-        if(this.products.length > 0) {
+       /* if(this.products.length > 0) {
             this.nextID = this.products[this.products.length-1].id + 1
         }   
-        product.id = this.nextID
+        product.id = this.nextID*/
         product.timestamp = Date.now()
         this.products.push(product)
         try{
