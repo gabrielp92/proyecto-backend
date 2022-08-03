@@ -63,7 +63,7 @@ function agregarCard(data){
           <p id="card${data.id}descripcion" class="card-text mb-0" contenteditable="${isAdmin}">${data.descripcion}</p>
           <i>Stock:</i><i id="card${data.id}stock" contenteditable="${isAdmin}">${data.stock}</i>
           ${buttonsCard}
-          Cód:<span id="card${data.id}código" contenteditable="${isAdmin}">${data.código}</span>
+          Cód:<span id="card${data.id}código" contenteditable="${isAdmin}">${data.código}</span> <b>Id:${data.id}</b>
         </div>
       </div>
     </div>

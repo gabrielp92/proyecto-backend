@@ -51,6 +51,26 @@ routerCarrito.get('/:id/productos', (req,res) => {
     }
 })
 
+routerCarrito.post('/cargarCarritoPorId', (req,res) => {
+    if(contenedorCarrito != null)
+    {
+        const producto = rout.contenedor.getById(req.body.productoId)
+        if(producto != null)
+        {
+            contenedorCarrito.save(producto)
+            .then(() => res.redirect('/'))
+            .catch(() => console.log('Error al guardar producto en carrito'))
+        }
+        else
+            console.log('producto no encontrado')
+    }
+    else
+    {
+        console.log('carrito no creado')
+        res.json()
+    }
+})
+
 routerCarrito.post('/:id/productos', (req,res) => {
     if(contenedorCarrito != null)
     {

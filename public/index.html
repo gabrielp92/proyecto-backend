@@ -20,7 +20,13 @@
                       <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                     </div>
                     <div class="offcanvas-body" style="color: #664147;">
-                      <div id="contenidoCarrito" style="font-size: 1rem;"></div>
+                        <form action="/api/carrito/cargarCarritoPorId" method="post">
+                            <label for="productoId" class="form-label fw-bold"><i>Cargar producto</i></label>
+                            <input type="text" name="productoId" class="form-control" id="productoId" placeholder="Escriba el id del producto">
+                            <input class="w-40 btn btn-success btn-md mt-2 mb-2" type="submit" value="Cargar">
+                        </form>
+                        <hr>
+                        <div id="contenidoCarrito" style="font-size: 1rem;"></div>
                     </div>
                 </div>  
             </div>
