@@ -1,43 +1,56 @@
-const fs = require('fs')
-
 class Contenedor {
 
-    constructor(filename)
+    constructor(knex, nameTable)
     {
-        this.filename = filename
+        this.knex = knex
+        this.nameTable = nameTable
         this.products = []
-        this.nextID = 1
+        this.nextID = 1    
     }
 
     async init()
     {
         try {
-            const data = await this.readFile()
-            if(data.length > 0) {
-                this.products = data
-                this.products.map( (p,index) => (!p.hasOwnProperty('id')) ? p.id = index + 1 : p.id)
-                this.nextID = this.products[data.length-1].id + 1    
-                await this.saveFile()
-            }
-        } catch (error) {
-            console.log('no se pudo leer el archivo')
+            await this.leerTabla()
+        } 
+        catch (error) {
+            console.log('no se pudo leer la tabla')
             console.error(error)
         }
     }
 
-    async save(product)
+    leerTabla()
     {
-        if(this.products.length > 0) {
-            this.nextID = this.products[this.products.length-1].id + 1
-        }   
-        product.id = this.nextID
-        product.timestamp = Date.now()
-        this.products.push(product)
-        try{
-            await this.saveFile()
-        } catch(error) {
+        this.knex.from(this.nameTable).select('*')
+        .then( rows => {
+            for (const row of rows) {
+                this.products.push( {id:row['id'], data: row['data']})
+                this.nextID = row.id
+            }
+        })
+        .catch( error => {
             console.log(error)
+            throw error
+        })
+       // .finally(() => this.knex.destroy())
+    }
+
+    async save(product)
+    {  
+        this.nextID++;
+        try{
+            await this.knex(this.nameTable).insert({data: product})
+            product.id = this.nextID
+            this.products.push(product)    
+        } 
+        catch(error) {
+            console.log(error)
+            throw error
         }
+        /*
+        finally{
+            this.knex.destroy()
+        }*/
         return product.id
     }
 
@@ -58,11 +71,15 @@ class Contenedor {
         if(index != -1)
         {
             this.products.splice(index,1)
-            try {
-                await this.saveFile()
-            } catch(error) {
+            this.knex.from(this.nameTable)
+            .where('id', '=', index)
+            .del()
+            .then( () => console.log('no se pudo eliminar de la tabla'))
+            .catch( error => {
                 console.log(error)
-            }
+                throw error
+            })
+            .finally(() => this.knex.destroy())
         }
         else
             console.log('error al eliminar: id no encontrado')
@@ -71,23 +88,14 @@ class Contenedor {
     async deleteAll()
     {
         this.products = []
-        try {
-            await this.saveFile()
-        } catch(error) {
+        this.knex.from(this.nameTable)
+        .del()
+        .then( () => console.log('contenido de la tabla eliminado'))
+        .catch( error => {
             console.log(error)
-        }
-    }
-
-    readFile()
-    {
-        return fs.promises.readFile(`./uploads/${this.filename}`,'utf-8')
-            .then(data => JSON.parse(data))
-            .catch(() => '')
-    }
-
-    saveFile()
-    {
-        return fs.promises.writeFile(`./uploads/${this.filename}`, JSON.stringify(this.products,null,2))
+            throw error
+        })
+        .finally(() => this.knex.destroy())
     }
 }
 
