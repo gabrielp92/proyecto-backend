@@ -59,7 +59,8 @@ io.on('connection', (socket) => {
             time
         };
         (async function(){
-            await contenedorChat.save(dataOut)
+           // await contenedorChat.save(dataOut)
+            await contenedorChat.save(JSON.stringify(dataOut))
         })();
         io.sockets.emit('chat-out', dataOut)
     })
