@@ -24,13 +24,8 @@ class Contenedor {
         this.knex.from(this.nameTable).select('*')
         .then( rows => {
             for (const row of rows) {
-                try {
-                    this.products.push(JSON.parse( `{"id":${row["id"]}, "data":${row["data"]}}`))
-                    this.nextID = row.id
-                    
-                } catch (error) {
-                    console.error(error)
-                }
+                this.products.push(JSON.parse( `{"id":${row["id"]}, "data":${row["data"]}}`))
+                this.nextID = row.id
             }
         })
         .catch( error => {

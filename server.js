@@ -41,7 +41,7 @@ app.get('/dataChat', (req,res) => {
 app.post('/productos', (req, res) => {   
     contenedorProductos.save(JSON.stringify(req.body))
         .then( () => {
-            io.sockets.emit('producto-out',req.body)
+            io.sockets.emit('producto-out', req.body)
             res.redirect('/')
         })
         .catch( () => res.send('Error to save'))
@@ -59,7 +59,6 @@ io.on('connection', (socket) => {
             time
         };
         (async function(){
-           // await contenedorChat.save(dataOut)
             await contenedorChat.save(JSON.stringify(dataOut))
         })();
         io.sockets.emit('chat-out', dataOut)

@@ -24,13 +24,14 @@ socket.on('chat-out', data => {
 })
 
 socket.on('producto-out', producto => {
+  console.log('entre')
 
   let filaTabla = `
     <tr class="border border-secondary">
-      <td class="p-4">${producto.data.title}</td>
-      <td class="p-4">${producto.data.price}</td>
+      <td class="p-4">${producto.title}</td>
+      <td class="p-4">${producto.price}</td>
       <td class="p-4">
-        <img src="${producto.data.thumbnail}" alt="foto">
+        <img src="${producto.thumbnail}" alt="foto">
       </td>
     </tr>`
    document.getElementById("body-tabla").innerHTML += filaTabla
