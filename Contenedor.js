@@ -24,15 +24,19 @@ class Contenedor {
         this.knex.from(this.nameTable).select('*')
         .then( rows => {
             for (const row of rows) {
-                this.products.push( {id:row['id'], data: row['data']})
-                this.nextID = row.id
+                try {
+                    this.products.push(JSON.parse( `{"id":${row["id"]}, "data":${row["data"]}}`))
+                    this.nextID = row.id
+                    
+                } catch (error) {
+                    console.error(error)
+                }
             }
         })
         .catch( error => {
             console.log(error)
             throw error
         })
-       // .finally(() => this.knex.destroy())
     }
 
     async save(product)
@@ -40,17 +44,12 @@ class Contenedor {
         this.nextID++;
         try{
             await this.knex(this.nameTable).insert({data: product})
-            product.id = this.nextID
-            this.products.push(product)    
+            this.products.push(JSON.parse( `{"id":${this.nextID}, "data":${product} }` ))
         } 
         catch(error) {
             console.log(error)
             throw error
         }
-        /*
-        finally{
-            this.knex.destroy()
-        }*/
         return product.id
     }
 

@@ -39,7 +39,7 @@ app.get('/dataChat', (req,res) => {
 })
 
 app.post('/productos', (req, res) => {   
-    contenedorProductos.save(req.body)
+    contenedorProductos.save(JSON.stringify(req.body))
         .then( () => {
             io.sockets.emit('producto-out',req.body)
             res.redirect('/')
