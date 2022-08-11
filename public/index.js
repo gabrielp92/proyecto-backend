@@ -38,11 +38,11 @@ socket.on('producto-out', producto => {
 })
 
 function addDataChatToDiv(data){
-  document.getElementById("chat").innerHTML += `<br><b style="color:blue">${data.data.username}</b> <span style="color:brown">[${data.data.date} ${data.data.time}]</span><span style="color:green">: <i>${data.data.msn}</i></span>`
+  document.getElementById("chat").innerHTML += `<br><b style="color:blue">${data.username}</b> <span style="color:brown">[${data.date} ${data.time}]</span><span style="color:green">: <i>${data.msn}</i></span>`
 }
 
 function loadDataChatToDiv(data){
-  data.forEach(d => addDataChatToDiv(d))
+  data.forEach(d => addDataChatToDiv(d.data))
 }
 
 function loadFirstDataChat(){
