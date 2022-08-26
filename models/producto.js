@@ -7,7 +7,7 @@ código:{type:Number, require:true},
 stock:{type:Number, require:true},
 precio:{type:Number, require:true},
 foto:{type:String, require:true, max:200},
-timestamp:{type:Date, require:true, max:200}
+timestamp:{type:Date, default: Date.now()}
 })
 
 const ProductModel = mongoose.model('productos', productSchema)
