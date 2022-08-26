@@ -40,8 +40,7 @@ class ContenedorMongoDb {
             product.timestamp = 0
             const productModel = new this.model(product);
             await productModel.save()
-            product._id = this.model.find({código: product.código},{_id:1})
-           // console.log('id: ' + product._id)
+            product._id = (await this.model.find({"código": product.código},{"_id":1}))[0]._id
             this.products.push(product)
         } 
         catch(error) {
