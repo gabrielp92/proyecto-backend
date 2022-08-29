@@ -36,16 +36,18 @@ class ContenedorMongoDb {
     async save(product)
     { 
         try{               
-            let productModel
+            let productModel;
             if(product.toObject().hasOwnProperty('_id'))
             {
                 productModel = new this.model(product);
-                productModel.isNew = true
+                productModel.isNew = true;
             }
             else
+            {
                 productModel = new this.model(product);
+                product._id = (await this.model.find({"código": product.código},{"_id":1}))[0]._id;
+            }
             await productModel.save()
-            product._id = (await this.model.find({"código": product.código},{"_id":1}))[0]._id
             this.products.push(product)
         } 
         catch(error) {
