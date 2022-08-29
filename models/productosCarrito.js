@@ -10,6 +10,6 @@ foto:{type:String, require:true, max:200},
 timestamp:{type:Date, default: Date.now()}
 })
 
-const ProductCartModel = mongoose.model('carritoProducto', productCartSchema)
+const ProductCartModel = mongoose.model('carritoproductos', productCartSchema)
 
 module.exports = ProductCartModel

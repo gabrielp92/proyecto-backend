@@ -9,6 +9,7 @@ routerCarrito.post('/', (req,res) => {
     contenedorCarrito = new CarritoDaoMongoDb();
     (async function(){
         await contenedorCarrito.init()
+        console.log('carrito creado')
     })();
     res.json(contenedorCarrito.getIdCarrito())
 })
@@ -52,10 +53,11 @@ routerCarrito.get('/:id/productos', (req,res) => {
 
 routerCarrito.post('/cargarCarritoPorId', (req,res) => {
     if(contenedorCarrito != null)
-    {
+    {       
         const producto = rout.contenedor.getById(req.body.productoId)
         if(producto != null)
-        {
+        {   console.log('entre en cargarCarritoPorId')
+            console.log(producto)
             contenedorCarrito.save(producto)
             .then(() => res.redirect('/'))
             .catch(() => console.log('Error al guardar producto en carrito'))
