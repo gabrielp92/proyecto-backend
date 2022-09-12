@@ -13,7 +13,12 @@ const DB = [
 routerLogin.use(cookieParser())
 
 routerLogin.use(session({
-    store: new MongoStore({mongoUrl: 'mongodb://localhost/sessions'}),
+    store: new MongoStore({
+        mongoUrl: 'mongodb+srv://GabrielP92:espORA36511196@cluster0.jbxpxs5.mongodb.net/proyectoDB?retryWrites=true&w=majority',
+        advancedOptions: {
+
+        }
+    }),
     secret: 'secret',
     resave: false,
     saveUninitialized: true
