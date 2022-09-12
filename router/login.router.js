@@ -1,5 +1,7 @@
-const express = require('express')
+const cookieParser = require('cookie-parser')
 const session = require('express-session')
+const express = require('express')
+const MongoStore = require('connect-mongo')
 const { Router } = express
 const routerLogin = Router()
 
@@ -8,9 +10,12 @@ const DB = [
     {username: 'ignacio', password:'secret'}
 ]
 
+routerLogin.use(cookieParser())
+
 routerLogin.use(session({
+    store: new MongoStore({mongoUrl: 'mongodb://localhost/sessions'}),
     secret: 'secret',
-    resave: true,
+    resave: false,
     saveUninitialized: true
 }))
 
