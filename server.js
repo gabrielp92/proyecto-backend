@@ -23,8 +23,17 @@ app.use((err,req,res,next) => {
 
 const isAdmin = true
 
+//SI NO FUNCIONA PONERLO EN LOGIN.ROUTER
 app.get('/login', (req,res) => {
-    res.sendFile(__dirname + '/public/login.html')
+    ////
+    if(req.isAuthenticated()) {
+        let user = req.user
+        console.log('User logueado desde antes')
+        res.sendFile(__dirname + '/public/index.html')
+    }
+    ////
+    else
+        res.sendFile(__dirname + '/public/login.html')
 })
 
 app.get('/', (req,res) => {
