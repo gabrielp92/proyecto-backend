@@ -23,16 +23,13 @@ app.use((err,req,res,next) => {
 
 const isAdmin = true
 
-//SI NO FUNCIONA PONERLO EN LOGIN.ROUTER
 app.get('/login', (req,res) => {
-    ////
     if(req.isAuthenticated()) {
-        let user = req.user
+        //let user = req.user
         console.log('User logueado desde antes')
         res.sendFile(__dirname + '/public/index.html')
     }
-    ////
-    else
+    else   
         res.sendFile(__dirname + '/public/login.html')
 })
 
@@ -41,7 +38,8 @@ app.get('/', (req,res) => {
 })
 
 app.get('/dataProductos', (req,res) => {
-    const username = req.session.username
+    //const username = req.session.username
+    const username = req.session.email
     const productos = rout.contenedor.getAll()
     res.json({productos, isAdmin, username})
 })

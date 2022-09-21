@@ -10,59 +10,45 @@ const routerLogin = Router()
 const mongoose = require('mongoose')
 const Users = require('../models/user')
 
-/*
-const DB = [
-    {username: 'nicolas', password:'12345'},
-    {username: 'ignacio', password:'secret'}
-]*/
-
-routerLogin.use(cookieParser())
-
-///////////////////////////////////
-/*
-const DBlocal = [
-    {username: 'r2', password:'d2', name: 'Artur'},
-    {username: 'manuel', password:'123456', name: 'Manuel'}
-]*/
 
 //Inicio de sesión
 passport.use('login', new localStrategy(
-    (username, password, done) => {
-    //const user = DBlocal.find(d => d.username == username && d.password == password)
-    Users.findOne({username}, (err,user) => {
-        if(err) return done(err)
-        if(!user) console.log('User not found!')
-        return done(null, user)   
-    })
-
+    (email, password, done) => {
+        Users.findOne( (email), (err,user) => {
+            console.log('user:')
+            console.log(user)
+            if(err) 
+            return done(err)
+            if(!user) 
+            {
+                console.log('User not found!')
+                return done(null, false)   
+            }
+            
+            return done(null,user)
+        })
     }
 ))
-
-//Registro de usuario
-
+    
+    //Registro de usuario
 passport.use('signup', new localStrategy({passReqToCallback: true},
-    (req, username, password, done) => {
-        Users.create({username, password, name: req.body.name}, (err,userWithID) => {
+    (req, email, password, done) => {
+        Users.create({email, password}, (err,userWithID) => {
             if(err) return done(err) 
             console.log('User registration successfull!', userWithID)
             return done(null, userWithID)
-
-        })
-       
-        /*
-        if(user) {
-            console.log('User already exists!');
-            return done(null, false)
-        }*/
-        
+        })        
     }
 ))
+        
+routerLogin.use(cookieParser())
 
 passport.serializeUser((user,done) => { done(null, user._id) })
-passport.deserializeUser((id,done) => Users.findById(id, done) )
+passport.deserializeUser((id,done) => Users.findById(id, done))
+
 
 routerLogin.use(session({
-    secret: 'catting',
+    secret: 'desafio',
     cookie: {
         httpOnly: false,
         secure: false,
@@ -76,52 +62,45 @@ routerLogin.use(session({
 routerLogin.use(passport.initialize())
 routerLogin.use(passport.session())
 
-//////////////////////////////////////
-
+//////////////////////////////
 /*
 routerLogin.use(session({
     store: new MongoStore({
-        mongoUrl: 'mongodb+srv://GabrielP92:espORA36511196@cluster0.jbxpxs5.mongodb.net/proyectoDB?retryWrites=true&w=majority',
-        advancedOptions: {
-
-        }
+        mongoUrl: 'mongodb+srv://GabrielP92:espORA36511196@cluster0.jbxpxs5.mongodb.net/proyectoDB?retryWrites=true&w=majority'
+  
     }),
-    secret: 'secret',
+    secret: 'desafio',
     resave: false,
     saveUninitialized: true
-}))
-*/
+}))*/
 
+////////////////////////////
+
+/*
 function auth(req,res,next)
 {
     if(req.session.admin) {
         return next()
     }
     return res.status(401).send('No autorizado')
-}
+}*/
 
 //agrego autenticación
 routerLogin.post('/login', passport.authenticate('login', { failureRedirect: '/faillogin'} ), (req,res) => {
     console.log('entro a post de login usuario')
     let username = req.user
+    console.log(username)
     console.log('User logueado por post')
-    
-    /*let username = req.body.usuario
-    if(!username)
-        return res.send('Login Failed')
-    username = username.toLowerCase()
-    const data = DB.find(d => d.username == username)
-    if(!data)
-        return res.send('Login failed with pass')*/
-    
-    req.session.username = username
+    //req.session.username = username
+    req.session.email = username
     req.session.admin = 1
     res.redirect('/')
 })
 
 routerLogin.get('/faillogin', (req,res) => {
     console.log('Error login')
-    // res.sendFile(__dirname + '/public/login-error.html')
+    const strErrorHTML = __dirname.replace('router','') + "public\\loginError.html"
+    res.sendFile(strErrorHTML)
 })
 
 routerLogin.get('/signup', (req,res) => {
@@ -129,10 +108,11 @@ routerLogin.get('/signup', (req,res) => {
     res.sendFile(strSignupHTML)
 })
 
-routerLogin.post('/signup', passport.authenticate('signup'), (req,res) => {
+routerLogin.post('/signup', passport.authenticate('signup', { failureRedirect: '/failSignup'}), (req,res) => {
     console.log('User registrado!')
     res.sendFile('Ok!!')
 })
+
 
 function checkAuthentication(req,res,next) {
     if(req.isAuthenticated()) next()
