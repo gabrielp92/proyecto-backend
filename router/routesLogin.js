@@ -1,5 +1,12 @@
 const res = require('express/lib/response')
 
+/*
+function getRoot(req,res)
+{
+    const strHTML = __dirname.replace('router','')
+    res.sendFile(strHTML + "public\\index.html")
+}*/
+
 function getLogin(req,res){
     const strHTML = __dirname.replace('router','')
     if(req.isAuthenticated()) {
@@ -8,7 +15,7 @@ function getLogin(req,res){
         res.sendFile(strHTML + "public\\index.html")
     }
     else   
-    res.sendFile(strHTML + "public\\login.html")
+        res.sendFile(strHTML + "public\\login.html")
 }
 
 function getSignup(req,res){
@@ -18,18 +25,18 @@ function getSignup(req,res){
 
 function postLogin(req,res){
     console.log('entro a post de login usuario')
-    let username = req.user.email
+    let username = req.user.username
     console.log(username)
     console.log('User logueado por post')
-    //req.session.username = username
-    req.session.email = username
+    req.session.username = username
     req.session.admin = 1
     res.redirect('/')
 }
 
 function postSignup(req,res){
     console.log('User registrado!')
-    //res.sendFile('Ok!!')
+    req.session.username = req.user.username
+    res.redirect('/login')
 }
 
 function getFailLogin(req,res){
@@ -44,13 +51,15 @@ function getFailSignup(req,res){
     res.sendFile(strErrorHTML)
 }
 
-function createHash(password) {
-    return bcrypt.hashSync(
-        password,
-        bcrypt.genSaltSync(10),
-        null);
+function getLogout(req,res){
+    req.logout( err => {
+        if(!err) 
+        {
+            res.send('logout ok')
+        }
+        else res.send({status: 'Logout error', body:err})
+    })
 }
-
 
 module.exports = {
     getLogin,
@@ -58,5 +67,6 @@ module.exports = {
     postLogin,
     postSignup,
     getFailLogin,
-    getFailSignup
+    getFailSignup,
+    getLogout
 }
