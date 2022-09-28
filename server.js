@@ -10,6 +10,7 @@ const rout  = require('./router/productos.router')
 const routCarrito =  require('./router/carrito.router')
 const routesLogin = require('./router/routesLogin')
 const yargs = require('yargs')(process.argv.slice(2))
+const { fork } = require('child_process')
 const app = express()
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
@@ -158,7 +159,7 @@ app.get('/info', (req,res) => {
         <br>
         Memoria total reservada (rss): ${process.memoryUsage().rss}
         <br>
-        Path de ejecución: ${process.argv[0]}
+        Path de ejecución: ${process.execPath}
         <br>
         Id del proceso: ${process.pid}
         <br>
@@ -166,6 +167,34 @@ app.get('/info', (req,res) => {
         <br>
     `
     res.send(info)
+})
+
+app.get('/api/randoms', (req,res) => {
+
+    const calculoRandoms = fork('./router/randoms')
+    const cant = parseInt(req.query.cant)
+    console.log(req.query.cant)
+    console.log(cant)
+    if(req.query.cant == undefined)
+    {
+        //se calculan 100.000.000 de números aleatorios
+        calculoRandoms.send(100000000)
+        res.send('OK') 
+    }
+    else
+        if(!isNaN(cant))
+        {   
+            if(cant > 0)
+            {
+                calculoRandoms.send(cant)
+                res.send('OK')
+            }
+            else
+            {
+                console.log('Error: La cantidad ingresada de números aleatorios a calcular es menor o igual a 1')  
+                res.send('Error: La cantidad ingresada de números aleatorios a calcular es menor o igual a 1')  
+            }   
+        }
 })
 
 const PORT = argv.port
