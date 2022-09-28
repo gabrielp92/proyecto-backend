@@ -148,6 +148,26 @@ app.post('/cargarProductos', (req,res) => {
         .catch(() => res.send('Error al guardar producto'))
 })
 
+app.get('/info', (req,res) => {
+    const info = `
+        Argumentos de entrada: ${JSON.stringify(argv)}
+        <br>
+        Sistema operativo: ${process.platform}
+        <br>
+        Versión de Node: ${process.version}
+        <br>
+        Memoria total reservada (rss): ${process.memoryUsage().rss}
+        <br>
+        Path de ejecución: ${process.argv[0]}
+        <br>
+        Id del proceso: ${process.pid}
+        <br>
+        Carpeta del proyecto: ${process.cwd()}
+        <br>
+    `
+    res.send(info)
+})
+
 const PORT = argv.port
 const server = app.listen(PORT, () => {
     console.log(`Server listening [${PORT}]...`)
