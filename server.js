@@ -9,6 +9,7 @@ const bcrypt = require('bcrypt')
 const rout  = require('./router/productos.router')
 const routCarrito =  require('./router/carrito.router')
 const routesLogin = require('./router/routesLogin')
+const yargs = require('yargs')(process.argv.slice(2))
 const app = express()
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
@@ -22,7 +23,21 @@ app.use((err,req,res,next) => {
     res.status(500).send('Hubo algún error')
 })
 
-const isAdmin = true;
+/***************** configuración librería yargs ********************/
+
+const argv = yargs
+    .default({
+        port: 8080,
+        admin: true
+    })
+    .alias({
+        p: 'port',
+        a: 'admin'
+    })
+    .boolean('admin')
+    .argv
+
+const isAdmin = argv.admin;
 
 /*********************** autenticación ************************/
 
@@ -133,7 +148,7 @@ app.post('/cargarProductos', (req,res) => {
         .catch(() => res.send('Error al guardar producto'))
 })
 
-const PORT = process.env.PORT || 8080
+const PORT = argv.port
 const server = app.listen(PORT, () => {
     console.log(`Server listening [${PORT}]...`)
 })
