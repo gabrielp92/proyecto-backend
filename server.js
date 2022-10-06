@@ -11,13 +11,15 @@ const routCarrito =  require('./router/carrito.router')
 const routesLogin = require('./router/routesLogin')
 const yargs = require('yargs')(process.argv.slice(2))
 const { fork } = require('child_process')
+const cluster = require('cluster')
+const numCPUs = require('os').cpus().length
 const app = express()
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use('/api/productos', rout.routerProducts)
 app.use('/api/carrito', routCarrito.routerCarrito)
 //app.use('/static', express.static(__dirname + '/public'))
-app.use(express.static(__dirname + '/public'))
+//app.use(express.static(__dirname + '/public'))
 app.use('/uploads', express.static('uploads'))
 app.use((err,req,res,next) => {
     console.error(err)
@@ -29,7 +31,8 @@ app.use((err,req,res,next) => {
 const argv = yargs
     .default({
         port: 8080,
-        admin: true
+        admin: true,
+        modo: 'fork'
     })
     .alias({
         p: 'port',
@@ -39,6 +42,7 @@ const argv = yargs
     .argv
 
 const isAdmin = argv.admin;
+let PORT = argv.port
 
 /*********************** autenticación ************************/
 
@@ -153,6 +157,8 @@ app.get('/info', (req,res) => {
     const info = `
         Argumentos de entrada: ${JSON.stringify(argv)}
         <br>
+        <b>Cantidad de procesadores en el servidor: ${numCPUs}</b>
+        <br>
         Sistema operativo: ${process.platform}
         <br>
         Versión de Node: ${process.version}
@@ -173,13 +179,14 @@ app.get('/api/randoms', (req,res) => {
 
     const calculoRandoms = fork('./router/randoms')
     const cant = parseInt(req.query.cant)
+    const strMessage = `Servidor express (NGINX) en puerto ${PORT} - <b>PID: ${process.pid}<b>`
     console.log(req.query.cant)
     console.log(cant)
     if(req.query.cant == undefined)
     {
         //se calculan 100.000.000 de números aleatorios
         calculoRandoms.send(100000000)
-        res.send('OK') 
+        res.send(strMessage) 
     }
     else
         if(!isNaN(cant))
@@ -187,7 +194,7 @@ app.get('/api/randoms', (req,res) => {
             if(cant > 0)
             {
                 calculoRandoms.send(cant)
-                res.send('OK')
+                res.send(strMessage)
             }
             else
             {
@@ -197,8 +204,7 @@ app.get('/api/randoms', (req,res) => {
         }
 })
 
-const PORT = argv.port
 const server = app.listen(PORT, () => {
-    console.log(`Server listening [${PORT}]...`)
+    console.log(`Servidor express escuchando en el puerto [${PORT}] - PID WORKER ${process.pid}`)
 })
 server.on('error', e => console.log('error en el server. ',e))
