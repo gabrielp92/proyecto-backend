@@ -7,7 +7,7 @@ const routerCarrito = Router()
 let contenedorCarrito = null
 
 routerCarrito.post('/', (req,res) => {
-    log4js.loggerInfo.info(`Ruta: ${req.url} - Método: ${req.method}`)
+    log4js.loggerInfo.info(`Ruta: ${request.originalUrl} - Método: ${request.method}`)
     contenedorCarrito = new CarritoDaoMongoDb();
     (async function(){
         await contenedorCarrito.init()
@@ -17,7 +17,7 @@ routerCarrito.post('/', (req,res) => {
 })
 
 routerCarrito.delete('/:id', (req,res) => {
-    log4js.loggerInfo.info(`Ruta: ${req.url} - Método: ${req.method}`)
+    log4js.loggerInfo.info(`Ruta: ${request.originalUrl} - Método: ${request.method}`)
     if(contenedorCarrito != null)
     {
         contenedorCarrito.clearCart(req.params.id)
@@ -32,7 +32,7 @@ routerCarrito.delete('/:id', (req,res) => {
 })
 
 routerCarrito.get('/cargarCarrito', (req,res) => {
-    log4js.loggerInfo.info(`Ruta: ${req.url} - Método: ${req.method}`)
+    log4js.loggerInfo.info(`Ruta: ${request.originalUrl} - Método: ${request.method}`)
     if(contenedorCarrito != null)
     {
         res.json(contenedorCarrito.getAll(contenedorCarrito.getIdCarrito()))
@@ -45,7 +45,7 @@ routerCarrito.get('/cargarCarrito', (req,res) => {
 })
 
 routerCarrito.get('/:id/productos', (req,res) => {
-    log4js.loggerInfo.info(`Ruta: ${req.url} - Método: ${req.method}`)
+    log4js.loggerInfo.info(`Ruta: ${request.originalUrl} - Método: ${request.method}`)
     if(contenedorCarrito != null)
         res.json(contenedorCarrito.getAll(req.params.id))
     else
@@ -56,7 +56,7 @@ routerCarrito.get('/:id/productos', (req,res) => {
 })
 
 routerCarrito.post('/cargarCarritoPorId', (req,res) => {
-    log4js.loggerInfo.info(`Ruta: ${req.url} - Método: ${req.method}`)
+    log4js.loggerInfo.info(`Ruta: ${request.originalUrl} - Método: ${request.method}`)
     if(contenedorCarrito != null)
     {       
         const producto = rout.contenedor.getById(req.body.productoId)
@@ -78,7 +78,7 @@ routerCarrito.post('/cargarCarritoPorId', (req,res) => {
 })
 
 routerCarrito.post('/:id/productos', (req,res) => {
-    log4js.loggerInfo.info(`Ruta: ${req.url} - Método: ${req.method}`)
+    log4js.loggerInfo.info(`Ruta: ${request.originalUrl} - Método: ${request.method}`)
     if(contenedorCarrito != null)
     {
         const producto = rout.contenedor.getById(req.params.id)
@@ -99,7 +99,7 @@ routerCarrito.post('/:id/productos', (req,res) => {
 })
 
 routerCarrito.delete('/:id/productos/:id_prod', (req,res) => {
-    log4js.loggerInfo.info(`Ruta: ${req.url} - Método: ${req.method}`)
+    log4js.loggerInfo.info(`Ruta: ${request.originalUrl} - Método: ${request.method}`)
     if(contenedorCarrito != null)
     {
         if(contenedorCarrito.getIdCarrito() == req.params.id)

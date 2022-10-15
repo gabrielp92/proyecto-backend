@@ -11,7 +11,7 @@ const { Router } = express
 const routerProducts = Router()
 
 routerProducts.get('/:id?', (request, response) =>  {
-    log4js.loggerInfo.info(`Ruta: ${request.url} - Método: ${request.method}`)
+    log4js.loggerInfo.info(`Ruta: ${request.originalUrl} - Método: ${request.method}`)
     let productos = null
     if(request.params.id == undefined)
         productos = contenedor.getAll()
@@ -29,9 +29,8 @@ routerProducts.get('/:id?', (request, response) =>  {
     response.json(productos)
 })
 
-routerProducts.post('/', (request,response) => {
-    
-    log4js.loggerInfo.info(`Ruta: ${request.url} - Método: ${request.method}`);
+routerProducts.post('/', (request,response) => {   
+    log4js.loggerInfo.info(`Ruta: ${request.originalUrl} - Método: ${request.method}`);
     (async function(){
         await contenedor.save(request.body)
     })();
@@ -39,8 +38,7 @@ routerProducts.post('/', (request,response) => {
 })
 
 routerProducts.put('/:id', (request,response) => {
-
-    log4js.loggerInfo.info(`Ruta: ${request.url} - Método: ${request.method}`);
+    log4js.loggerInfo.info(`Ruta: ${request.originalUrl} - Método: ${request.method}`);
     const producto = contenedor.getById(request.params.id);
     if(producto == null)
     {
@@ -59,7 +57,7 @@ routerProducts.put('/:id', (request,response) => {
 })
 
 routerProducts.delete('/:id', (request,response) => {
-    log4js.loggerInfo.info(`Ruta: ${request.url} - Método: ${request.method}`);
+    log4js.loggerInfo.info(`Ruta: ${request.originalUrl} - Método: ${request.method}`);
     (async function(){
         await contenedor.deleteById(request.params.id)
     })();
