@@ -1,3 +1,4 @@
+const log4js = require('./log4js')
 class ContenedorMongoDb {
 
     constructor(model)
@@ -12,7 +13,7 @@ class ContenedorMongoDb {
             await this.readColeccion()
         } 
         catch (error) {
-            console.log('no se pudo leer la colección')
+            log4js.loggerError.error('no se pudo leer la colección')
             console.error(error)
         }
     }
@@ -28,7 +29,7 @@ class ContenedorMongoDb {
                 }
             })
             .catch( error => {
-                console.log(error)
+                log4js.loggerError.error(`${error}`)
                 throw error
             })
     }
@@ -51,7 +52,7 @@ class ContenedorMongoDb {
             this.products.push(product)
         } 
         catch(error) {
-            console.log(error)
+            log4js.loggerError.error(`${error}`)
             throw error
         }
         return product._id
@@ -78,12 +79,12 @@ class ContenedorMongoDb {
                 await this.model.deleteOne({"_id":id})
             }
             catch(error) {
-                console.log('error al intentar eliminar documento de la BD', error)
+                log4js.loggerError.error('error al intentar eliminar documento de la BD')
                 throw error
             }
         }
         else
-            console.log('error al eliminar: id no encontrado')
+            log4js.loggerError.error('error al eliminar: id no encontrado')
     }
 
     async deleteAll()
@@ -93,7 +94,7 @@ class ContenedorMongoDb {
             await this.model.deleteMany({}) //elimina todos los documentos pero no la colección
         }
         catch(error) {
-            console.log('error al intentar eliminar colección de la BD', error)
+            log4js.loggerError.error('error al intentar eliminar colección de la BD')
             throw error
         }
     }
@@ -125,7 +126,7 @@ class ContenedorMongoDb {
 
         }
         catch(error) {
-            console.log('error al intentar actualizar documento de la BD', error)
+            log4js.loggerError.error('error al intentar actualizar documento de la BD')
             throw error
         }
     }

@@ -1,13 +1,12 @@
+const log4js = require('./log4js')
 /*********** Creación de contenedor para productos ************/
 const ProductosDaoMongoDb = require('../daos/productos/ProductosDaoMongoDb');
 let contenedor = new ProductosDaoMongoDb();
 (async function(){
     await contenedor.init()
 })();
-
 /**************************************************************/
 const express = require('express')
-const log4js = require('./log4js')
 const { Router } = express
 const routerProducts = Router()
 

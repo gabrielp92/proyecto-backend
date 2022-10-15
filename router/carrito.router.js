@@ -1,3 +1,4 @@
+const log4js = require('./log4js')
 const rout  = require('./productos.router');
 const CarritoDaoMongoDb = require('../daos/carrito/CarritoDaoMongoDb');
 const express = require('express');
@@ -6,6 +7,7 @@ const routerCarrito = Router()
 let contenedorCarrito = null
 
 routerCarrito.post('/', (req,res) => {
+    log4js.loggerInfo.info(`Ruta: ${req.url} - Método: ${req.method}`)
     contenedorCarrito = new CarritoDaoMongoDb();
     (async function(){
         await contenedorCarrito.init()
@@ -15,43 +17,46 @@ routerCarrito.post('/', (req,res) => {
 })
 
 routerCarrito.delete('/:id', (req,res) => {
-  
+    log4js.loggerInfo.info(`Ruta: ${req.url} - Método: ${req.method}`)
     if(contenedorCarrito != null)
     {
         contenedorCarrito.clearCart(req.params.id)
             .then(() => res.redirect(`${req.baseUrl}/cargarCarrito`))
-            .catch(() => console.log('Error al eliminar carrito'))
+            .catch(() => log4js.loggerError.error('Error al eliminar carrito'))
     }
     else
     {
-        console.log('carrito no creado')
+        log4js.loggerError.error('carrito no creado')
         res.json()
     }
 })
 
 routerCarrito.get('/cargarCarrito', (req,res) => {
+    log4js.loggerInfo.info(`Ruta: ${req.url} - Método: ${req.method}`)
     if(contenedorCarrito != null)
     {
         res.json(contenedorCarrito.getAll(contenedorCarrito.getIdCarrito()))
     }
     else
     {
-        console.log('carrito no creado')
+        log4js.loggerError.error('carrito no creado')
         res.json()
     }
 })
 
 routerCarrito.get('/:id/productos', (req,res) => {
+    log4js.loggerInfo.info(`Ruta: ${req.url} - Método: ${req.method}`)
     if(contenedorCarrito != null)
         res.json(contenedorCarrito.getAll(req.params.id))
     else
     {
-        console.log('carrito no creado')
+        log4js.loggerError.error('carrito no creado')
         res.json()
     }
 })
 
 routerCarrito.post('/cargarCarritoPorId', (req,res) => {
+    log4js.loggerInfo.info(`Ruta: ${req.url} - Método: ${req.method}`)
     if(contenedorCarrito != null)
     {       
         const producto = rout.contenedor.getById(req.body.productoId)
@@ -60,19 +65,20 @@ routerCarrito.post('/cargarCarritoPorId', (req,res) => {
             console.log(producto)
             contenedorCarrito.save(producto)
             .then(() => res.redirect('/'))
-            .catch(() => console.log('Error al guardar producto en carrito'))
+            .catch(() => log4js.loggerError.error('Error al guardar producto en carrito'))
         }
         else
-            console.log('producto no encontrado')
+            log4js.loggerError.error('producto no encontrado')
     }
     else
     {
-        console.log('carrito no creado')
+        log4js.loggerError.error('carrito no creado')
         res.json()
     }
 })
 
 routerCarrito.post('/:id/productos', (req,res) => {
+    log4js.loggerInfo.info(`Ruta: ${req.url} - Método: ${req.method}`)
     if(contenedorCarrito != null)
     {
         const producto = rout.contenedor.getById(req.params.id)
@@ -80,33 +86,34 @@ routerCarrito.post('/:id/productos', (req,res) => {
         {
             contenedorCarrito.save(producto)
                 .then(() => res.redirect(`${req.baseUrl}/cargarCarrito`))
-                .catch(() => console.log('Error al guardar producto en carrito'))
+                .catch(() => log4js.loggerError.error('Error al guardar producto en carrito'))
         }
         else
-            console.log('producto no encontrado')
+            log4js.loggerError.error('producto no encontrado')
     }
     else
     {
-        console.log('carrito no creado')
+        log4js.loggerError.error('carrito no creado')
         res.json()
     }
 })
 
 routerCarrito.delete('/:id/productos/:id_prod', (req,res) => {
+    log4js.loggerInfo.info(`Ruta: ${req.url} - Método: ${req.method}`)
     if(contenedorCarrito != null)
     {
         if(contenedorCarrito.getIdCarrito() == req.params.id)
         {
             contenedorCarrito.deleteById(req.params.id_prod)
                 .then(() => res.redirect(`${req.baseUrl}/cargarCarrito`))
-                .catch(() => console.log('Error al eliminar producto del carrito'))
+                .catch(() => log4js.loggerError.error('Error al eliminar producto del carrito'))
         }
         else
-            console.log('carrito no encontrado')
+            log4js.loggerError.error('carrito no encontrado')
     }
     else
     {
-        console.log('carrito no creado')
+        log4js.loggerError.error('carrito no creado')
         res.json()
     }
 })
