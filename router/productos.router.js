@@ -7,10 +7,12 @@ let contenedor = new ProductosDaoMongoDb();
 
 /**************************************************************/
 const express = require('express')
+const log4js = require('./log4js')
 const { Router } = express
 const routerProducts = Router()
 
 routerProducts.get('/:id?', (request, response) =>  {
+    log4js.loggerInfo.info(`Ruta: ${request.url} - Método: ${request.method}`)
     let productos = null
     if(request.params.id == undefined)
         productos = contenedor.getAll()
@@ -19,6 +21,7 @@ routerProducts.get('/:id?', (request, response) =>  {
         productos = contenedor.getById(request.params.id)
         if(productos == null)
         {
+            log4js.loggerError.error(`producto no encontrado`)
             response.status(404)
             response.json({error : 'producto no encontrado'})
             return
@@ -28,8 +31,8 @@ routerProducts.get('/:id?', (request, response) =>  {
 })
 
 routerProducts.post('/', (request,response) => {
-   
-    console.log('POST recibido');
+    
+    log4js.loggerInfo.info(`Ruta: ${request.url} - Método: ${request.method}`);
     (async function(){
         await contenedor.save(request.body)
     })();
@@ -38,11 +41,11 @@ routerProducts.post('/', (request,response) => {
 
 routerProducts.put('/:id', (request,response) => {
 
-    console.log('PUT recibido')
-
+    log4js.loggerInfo.info(`Ruta: ${request.url} - Método: ${request.method}`);
     const producto = contenedor.getById(request.params.id);
     if(producto == null)
     {
+        log4js.loggerError.error(`producto no encontrado`)
         response.status(404)
         response.json({error : 'producto no encontrado'})
         return
@@ -52,12 +55,12 @@ routerProducts.put('/:id', (request,response) => {
         await contenedor.update(producto, request.body) 
     })();
 
-    console.log('producto actualizado correctamente')
+    log4js.loggerInfo.info('producto actualizado correctamente')
     response.json("actualiza producto con id:" + request.params.id)
 })
 
 routerProducts.delete('/:id', (request,response) => {
-    console.log('DELETE recibido');
+    log4js.loggerInfo.info(`Ruta: ${request.url} - Método: ${request.method}`);
     (async function(){
         await contenedor.deleteById(request.params.id)
     })();

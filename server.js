@@ -1,5 +1,7 @@
+const log4js = require('./log4js')
 const Conexion = require('./config')
 const Contenedor = require('./daos/productos/ProductosDaoMongoDb')
+const compression = require('compression') //gzip
 const express = require('express')
 const session = require('express-session')
 const passport = require('passport')
@@ -22,9 +24,10 @@ app.use('/api/carrito', routCarrito.routerCarrito)
 //app.use(express.static(__dirname + '/public'))
 app.use('/uploads', express.static('uploads'))
 app.use((err,req,res,next) => {
-    console.error(err)
+    log4js.loggerWarning.warn(`Ruta inexistente: ${req.url} - Método: ${req.method}`)
     res.status(500).send('Hubo algún error')
 })
+app.use(compression())  //gzip
 
 /***************** configuración librería yargs ********************/
 
@@ -135,6 +138,7 @@ app.get('/failsignup', routesLogin.getFailSignup)
 app.get('/logout', routesLogin.getLogout)
 
 app.get('/', (req,res) => {
+    log4js.loggerInfo.info(`Ruta: ${req.url} - Método: ${req.method}`)
     res.sendFile(__dirname + '/public/index.html')
 })
 
@@ -154,6 +158,8 @@ app.post('/cargarProductos', (req,res) => {
 })
 
 app.get('/info', (req,res) => {
+
+    log4js.loggerInfo.info(`Ruta: ${req.url} - Método: ${req.method}`)
     const info = `
         Argumentos de entrada: ${JSON.stringify(argv)}
         <br>
@@ -177,6 +183,7 @@ app.get('/info', (req,res) => {
 
 app.get('/api/randoms', (req,res) => {
 
+    log4js.loggerInfo.info(`Ruta: ${req.url} - Método: ${req.method}`)
     const calculoRandoms = fork('./router/randoms')
     const cant = parseInt(req.query.cant)
     const strMessage = `Servidor express (NGINX) en puerto ${PORT} - <b>PID: ${process.pid}<b>`
