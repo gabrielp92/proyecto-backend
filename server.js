@@ -24,7 +24,6 @@ app.use('/api/carrito', routCarrito.routerCarrito)
 //app.use(express.static(__dirname + '/public'))
 app.use('/uploads', express.static('uploads'))
 app.use((err,req,res,next) => {
-    log4js.loggerWarning.warn(`Ruta inexistente: ${req.url} - Método: ${req.method}`)
     res.status(500).send('Hubo algún error')
 })
 app.use(compression())  //gzip
@@ -209,6 +208,12 @@ app.get('/api/randoms', (req,res) => {
                 res.send('Error: La cantidad ingresada de números aleatorios a calcular es menor o igual a 1')  
             }   
         }
+})
+
+//rutas inexistentes en el server
+app.get('/*', (req, res) => {
+    log4js.loggerWarning.warn(`Ruta: ${req.originalUrl} - Método: ${req.method}`)
+    res.send(`Error: Ruta no encontrada`)
 })
 
 const server = app.listen(PORT, () => {
