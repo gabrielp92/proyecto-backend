@@ -1,4 +1,4 @@
-const log4js = require('./log4js')
+const log4js = require('../log4js')
 const rout  = require('./productos.router');
 const CarritoDaoMongoDb = require('../daos/carrito/CarritoDaoMongoDb');
 const express = require('express');

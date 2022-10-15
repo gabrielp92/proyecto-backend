@@ -1,5 +1,6 @@
 const ContenedorMongoDb = require('../../contenedores/ContenedorMongoDb')
 const ProductCartModel = require('../../models/productosCarrito')
+const log4js = require('../../log4js')
 
 class CarritoDaoMongoDb extends ContenedorMongoDb {
 
@@ -21,7 +22,7 @@ class CarritoDaoMongoDb extends ContenedorMongoDb {
         if(this.id == id) 
             return super.getAll()
         else
-            console.log('Carrito no encontrado')
+            log4js.loggerError.error('Carrito no encontrado')
     }
 
     async clearCart(id)
@@ -29,7 +30,7 @@ class CarritoDaoMongoDb extends ContenedorMongoDb {
         if(this.id == id)
             await super.deleteAll()
         else
-            console.log('Error: Carrito no encontrado')
+            log4js.loggerError.error('Error: Carrito no encontrado')
     }
 
     async desconectar()

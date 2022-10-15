@@ -1,4 +1,4 @@
-const log4js = require('./log4js')
+const log4js = require('../log4js')
 /*********** Creación de contenedor para productos ************/
 const ProductosDaoMongoDb = require('../daos/productos/ProductosDaoMongoDb');
 let contenedor = new ProductosDaoMongoDb();
