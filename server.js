@@ -44,6 +44,7 @@ const argv = yargs
     .argv
 
 const isAdmin = argv.admin;
+const modo = argv.modo
 let PORT = argv.port
 
 /*********************** autenticación ************************/
@@ -156,30 +157,6 @@ app.post('/cargarProductos', (req,res) => {
         .catch(() => res.send('Error al guardar producto'))
 })
 
-app.get('/info', (req,res) => {
-
-    log4js.loggerInfo.info(`Ruta: ${req.url} - Método: ${req.method}`)
-    const info = `
-        Argumentos de entrada: ${JSON.stringify(argv)}
-        <br>
-        <b>Cantidad de procesadores en el servidor: ${numCPUs}</b>
-        <br>
-        Sistema operativo: ${process.platform}
-        <br>
-        Versión de Node: ${process.version}
-        <br>
-        Memoria total reservada (rss): ${process.memoryUsage().rss}
-        <br>
-        Path de ejecución: ${process.execPath}
-        <br>
-        Id del proceso: ${process.pid}
-        <br>
-        Carpeta del proyecto: ${process.cwd()}
-        <br>
-    `
-    res.send(info)
-})
-
 app.get('/api/randoms', (req,res) => {
 
     log4js.loggerInfo.info(`Ruta: ${req.url} - Método: ${req.method}`)
@@ -216,7 +193,48 @@ app.get('/*', (req, res) => {
     res.send(`Error: Ruta no encontrada`)
 })
 
-const server = app.listen(PORT, () => {
-    console.log(`Servidor express escuchando en el puerto [${PORT}] - PID WORKER ${process.pid}`)
-})
-server.on('error', e => console.log('error en el server. ',e))
+/*********************************************************************************************/
+if(modo == 'cluster' && cluster.isMaster) {
+    console.log('numCPUs: ', numCPUs)
+    console.log('PID master:', process.pid)
+
+    for(let i=0; i < numCPUs; i++)
+    {
+        cluster.fork()
+    }
+
+    cluster.on('exit', worker => {
+        console.log(`worker ${worker.process.pid} died`)
+    })
+}
+else {
+
+    app.get('/info', (req,res) => {
+        
+        log4js.loggerInfo.info(`Ruta: ${req.url} - Método: ${req.method}`)
+        const info = `
+            Argumentos de entrada: ${JSON.stringify(argv)}
+            <br>
+            <b>Cantidad de procesadores en el servidor: ${numCPUs}</b>
+            <br>
+            Sistema operativo: ${process.platform}
+            <br>
+            Versión de Node: ${process.version}
+            <br>
+            Memoria total reservada (rss): ${process.memoryUsage().rss}
+            <br>
+            Path de ejecución: ${process.execPath}
+            <br>
+            Id del proceso: ${process.pid}
+            <br>
+            Carpeta del proyecto: ${process.cwd()}
+            <br>
+        `
+        res.send(info)
+    })
+
+    const server = app.listen(PORT, () => {
+        console.log(`Servidor express escuchando en el puerto [${PORT}] - PID WORKER ${process.pid}`)
+    })
+    server.on('error', e => console.log('error en el server. ',e))
+}
