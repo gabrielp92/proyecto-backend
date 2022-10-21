@@ -45,7 +45,8 @@ const argv = yargs
 
 const isAdmin = argv.admin;
 const modo = argv.modo
-let PORT = argv.port
+//let PORT = argv.port
+let PORT = process.env.port || argv.port
 
 /*********************** autenticación ************************/
 
