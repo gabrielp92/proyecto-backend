@@ -22,7 +22,7 @@ app.use('/api/productos', rout.routerProducts)
 app.use('/api/carrito', routCarrito.routerCarrito)
 //app.use('/static', express.static(__dirname + '/public'))
 //app.use(express.static(__dirname + '/public'))
-app.use(express.static('public'))
+//app.use(express.static('public'))
 app.use('/uploads', express.static('uploads'))
 app.use((err,req,res,next) => {
     res.status(500).send('Hubo algún error')
@@ -46,7 +46,6 @@ const argv = yargs
 
 const isAdmin = argv.admin;
 const modo = argv.modo
-//let PORT = argv.port
 const PORT = process.env.PORT || argv.port
 
 /*********************** autenticación ************************/
@@ -127,7 +126,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 /******************************** rutas ********************************/
-//app.get('/', routesLogin.getRoot);
+app.get('/', routesLogin.getRoot);
 
 app.get('/login', routesLogin.getLogin)
 app.post('/login', passport.authenticate('login', { failureRedirect: '/faillogin'}), routesLogin.postLogin)
@@ -139,9 +138,14 @@ app.get('/failsignup', routesLogin.getFailSignup)
 
 app.get('/logout', routesLogin.getLogout)
 
+/*
 app.get('/', (req,res) => {
     log4js.loggerInfo.info(`Ruta: ${req.url} - Método: ${req.method}`)
     res.sendFile(__dirname + '/public/index.html')
+})*/
+
+app.get('/heroku', (req,res) => {
+    res.send('Hola Node.js desde Heroku')
 })
 
 app.get('/dataProductos', (req,res) => {
