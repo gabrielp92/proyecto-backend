@@ -20,7 +20,6 @@ app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use('/api/productos', rout.routerProducts)
 app.use('/api/carrito', routCarrito.routerCarrito)
-app.use('', routesLogin)
 //app.use('/static', express.static(__dirname + '/public'))
 //app.use(express.static(__dirname + '/public'))
 app.use(express.static('public'))
@@ -115,7 +114,6 @@ app.use(session({
     secret: 'gabriel',
     resave: false,
     saveUninitialized: false,
-    proxy: true,
     rolling: true,
     cookie: {
         maxAge: 600000, //10 minutos
