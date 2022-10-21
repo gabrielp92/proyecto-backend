@@ -143,7 +143,7 @@ app.get('/', (req,res) => {
     if(req.isAuthenticated())
         res.sendFile(__dirname + '/public/index.html')
     else
-        res.sendFile(__dirname + '/public/login.html')
+        res.redirect('/login')
 })
 
 app.get('/heroku', (req,res) => {
