@@ -1,7 +1,7 @@
 const res = require('express/lib/response')
 const log4js = require('../log4js')
 
-
+/*
 function getRoot(req,res){
     log4js.loggerInfo.info(`Ruta: ${req.originalUrl} - Método: ${req.method}`)
     const strHTML = __dirname.replace('router','')
@@ -9,7 +9,7 @@ function getRoot(req,res){
         res.sendFile(strHTML + "public\\index.html")
     else
         res.redirect('/login')
-}
+}*/
 
 function getLogin(req,res){
     log4js.loggerInfo.info(`Ruta: ${req.originalUrl} - Método: ${req.method}`)
@@ -73,7 +73,7 @@ function getLogout(req,res){
 }
 
 module.exports = {
-    getRoot,
+   // getRoot,
     getLogin,
     getSignup,
     postLogin,

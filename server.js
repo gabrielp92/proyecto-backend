@@ -126,7 +126,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 /******************************** rutas ********************************/
-app.get('/', routesLogin.getRoot)
+//app.get('/', routesLogin.getRoot)
 
 app.get('/login', routesLogin.getLogin)
 app.post('/login', passport.authenticate('login', { failureRedirect: '/faillogin'}), routesLogin.postLogin)
@@ -138,11 +138,13 @@ app.get('/failsignup', routesLogin.getFailSignup)
 
 app.get('/logout', routesLogin.getLogout)
 
-/*
 app.get('/', (req,res) => {
     log4js.loggerInfo.info(`Ruta: ${req.url} - Método: ${req.method}`)
-    res.sendFile(__dirname + '/public/index.html')
-})*/
+    if(req.isAuthenticated())
+        res.sendFile(__dirname + '/public/index.html')
+    else
+        res.sendFile(__dirname + '/public/login.html')
+})
 
 app.get('/heroku', (req,res) => {
     res.send('Hola Node.js desde Heroku')
