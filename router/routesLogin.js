@@ -8,7 +8,7 @@ function getRoot(req,res){
     if(req.isAuthenticated()) 
         res.sendFile(strHTML + "public\\index.html")
     else
-        res.sendFile(strHTML + "public\\login.html")
+        res.redirect('/login')
 }
 
 function getLogin(req,res){
