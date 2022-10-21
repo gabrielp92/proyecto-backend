@@ -110,10 +110,12 @@ function isValidPassword(user, password) {
 passport.serializeUser((user,done) => done(null, user._id))
 passport.deserializeUser((id,done) => Users.findById(id, done))
 
+app.enable('trust proxy')
 app.use(session({
     secret: 'gabriel',
     resave: false,
     saveUninitialized: false,
+    proxy: true,
     rolling: true,
     cookie: {
         maxAge: 600000, //10 minutos
