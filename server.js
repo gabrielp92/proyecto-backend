@@ -22,7 +22,7 @@ app.use('/api/productos', rout.routerProducts)
 app.use('/api/carrito', routCarrito.routerCarrito)
 //app.use('/static', express.static(__dirname + '/public'))
 //app.use(express.static(__dirname + '/public'))
-//app.use(express.static('public'))
+app.use(express.static('public'))
 app.use('/uploads', express.static('uploads'))
 app.use((err,req,res,next) => {
     res.status(500).send('Hubo algún error')
