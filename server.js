@@ -23,6 +23,7 @@ app.use('/api/carrito', routCarrito.routerCarrito)
 //app.use('/static', express.static(__dirname + '/public'))
 //app.use(express.static(__dirname + '/public'))
 app.use(express.static('public'))
+app.use(express.static('router'))
 app.use('/uploads', express.static('uploads'))
 app.use((err,req,res,next) => {
     res.status(500).send('Hubo algún error')
@@ -126,7 +127,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 /******************************** rutas ********************************/
-app.get('/', routesLogin.getRoot);
+app.get('/', routesLogin.getRoot)
 
 app.get('/login', routesLogin.getLogin)
 app.post('/login', passport.authenticate('login', { failureRedirect: '/faillogin'}), routesLogin.postLogin)
