@@ -22,6 +22,7 @@ app.use('/api/productos', rout.routerProducts)
 app.use('/api/carrito', routCarrito.routerCarrito)
 //app.use('/static', express.static(__dirname + '/public'))
 //app.use(express.static(__dirname + '/public'))
+app.use(express.static('public'))
 app.use('/uploads', express.static('uploads'))
 app.use((err,req,res,next) => {
     res.status(500).send('Hubo algún error')
@@ -46,7 +47,7 @@ const argv = yargs
 const isAdmin = argv.admin;
 const modo = argv.modo
 //let PORT = argv.port
-let PORT = process.env.port || argv.port
+const PORT = process.env.PORT || argv.port
 
 /*********************** autenticación ************************/
 
