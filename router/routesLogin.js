@@ -1,5 +1,6 @@
 const res = require('express/lib/response')
 const log4js = require('../log4js')
+let username = undefined;
 
 /*
 function getRoot(req,res){
@@ -15,7 +16,6 @@ function getLogin(req,res){
     log4js.loggerInfo.info(`Ruta: ${req.originalUrl} - Método: ${req.method}`)
     const strHTML = __dirname.replace('router','')
     if(req.isAuthenticated()) {
-        //let user = req.user
         log4js.loggerInfo.info('User logueado desde antes')
         res.sendFile(strHTML + "public\\index.html")
     }
@@ -31,7 +31,7 @@ function getSignup(req,res){
 
 function postLogin(req,res){
     log4js.loggerInfo.info('entro a post de login usuario')
-    let username = req.user.username
+    username = req.user.username
     log4js.loggerInfo.info(`${username}`)
     log4js.loggerInfo.info('User logueado por post')
     req.session.username = username
@@ -80,5 +80,6 @@ module.exports = {
     postSignup,
     getFailLogin,
     getFailSignup,
-    getLogout
+    getLogout,
+    username
 }

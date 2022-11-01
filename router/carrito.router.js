@@ -2,22 +2,24 @@ const log4js = require('../log4js')
 const rout  = require('./productos.router');
 const CarritoDaoMongoDb = require('../daos/carrito/CarritoDaoMongoDb');
 const express = require('express');
+const mailGmail = require('../mailGmail')
+const twilioWhatsapp = require('../twilioWhatsapp')
 const { Router } = express
 const routerCarrito = Router()
-let contenedorCarrito = null
+let username = undefined;
+let contenedorCarrito = new CarritoDaoMongoDb();
+(async function(){
+    await contenedorCarrito.init()
+    console.log('carrito creado')
+})();
 
 routerCarrito.post('/', (req,res) => {
-    log4js.loggerInfo.info(`Ruta: ${request.originalUrl} - Método: ${request.method}`)
-    contenedorCarrito = new CarritoDaoMongoDb();
-    (async function(){
-        await contenedorCarrito.init()
-        console.log('carrito creado')
-    })();
+    log4js.loggerInfo.info(`Ruta: ${req.originalUrl} - Método: ${req.method}`)
     res.json(contenedorCarrito.getIdCarrito())
 })
 
 routerCarrito.delete('/:id', (req,res) => {
-    log4js.loggerInfo.info(`Ruta: ${request.originalUrl} - Método: ${request.method}`)
+    log4js.loggerInfo.info(`Ruta: ${req.originalUrl} - Método: ${req.method}`)
     if(contenedorCarrito != null)
     {
         contenedorCarrito.clearCart(req.params.id)
@@ -32,7 +34,7 @@ routerCarrito.delete('/:id', (req,res) => {
 })
 
 routerCarrito.get('/cargarCarrito', (req,res) => {
-    log4js.loggerInfo.info(`Ruta: ${request.originalUrl} - Método: ${request.method}`)
+    log4js.loggerInfo.info(`Ruta: ${req.originalUrl} - Método: ${req.method}`)
     if(contenedorCarrito != null)
     {
         res.json(contenedorCarrito.getAll(contenedorCarrito.getIdCarrito()))
@@ -45,7 +47,7 @@ routerCarrito.get('/cargarCarrito', (req,res) => {
 })
 
 routerCarrito.get('/:id/productos', (req,res) => {
-    log4js.loggerInfo.info(`Ruta: ${request.originalUrl} - Método: ${request.method}`)
+    log4js.loggerInfo.info(`Ruta: ${req.originalUrl} - Método: ${req.method}`)
     if(contenedorCarrito != null)
         res.json(contenedorCarrito.getAll(req.params.id))
     else
@@ -56,12 +58,12 @@ routerCarrito.get('/:id/productos', (req,res) => {
 })
 
 routerCarrito.post('/cargarCarritoPorId', (req,res) => {
-    log4js.loggerInfo.info(`Ruta: ${request.originalUrl} - Método: ${request.method}`)
+    log4js.loggerInfo.info(`Ruta: ${req.originalUrl} - Método: ${req.method}`)
     if(contenedorCarrito != null)
     {       
         const producto = rout.contenedor.getById(req.body.productoId)
         if(producto != null)
-        {   console.log('entre en cargarCarritoPorId')
+        {   console.log('entré en cargarCarritoPorId')
             console.log(producto)
             contenedorCarrito.save(producto)
             .then(() => res.redirect('/'))
@@ -78,7 +80,7 @@ routerCarrito.post('/cargarCarritoPorId', (req,res) => {
 })
 
 routerCarrito.post('/:id/productos', (req,res) => {
-    log4js.loggerInfo.info(`Ruta: ${request.originalUrl} - Método: ${request.method}`)
+    log4js.loggerInfo.info(`Ruta: ${req.originalUrl} - Método: ${req.method}`)
     if(contenedorCarrito != null)
     {
         const producto = rout.contenedor.getById(req.params.id)
@@ -99,7 +101,7 @@ routerCarrito.post('/:id/productos', (req,res) => {
 })
 
 routerCarrito.delete('/:id/productos/:id_prod', (req,res) => {
-    log4js.loggerInfo.info(`Ruta: ${request.originalUrl} - Método: ${request.method}`)
+    log4js.loggerInfo.info(`Ruta: ${req.originalUrl} - Método: ${req.method}`)
     if(contenedorCarrito != null)
     {
         if(contenedorCarrito.getIdCarrito() == req.params.id)
@@ -118,7 +120,25 @@ routerCarrito.delete('/:id/productos/:id_prod', (req,res) => {
     }
 })
 
+function setUsername(nombre)
+{
+    username = nombre
+}
+
+routerCarrito.post('/finalizarCompra', (req,res) => {
+    log4js.loggerInfo.info(`Ruta: ${req.originalUrl} - Método: ${req.method}`)
+    const productosEnCarrito = contenedorCarrito.getAll(contenedorCarrito.getIdCarrito())
+    if(productosEnCarrito.length != 0)
+    {
+        console.log('username: ' + username)
+        mailGmail.enviarMail(username, productosEnCarrito)
+        twilioWhatsapp.enviarWhatsapp(username)
+    }
+    res.json('Compra realizada exitosamente')
+})
+
 module.exports = {
     contenedorCarrito : contenedorCarrito,
-    routerCarrito : routerCarrito
+    routerCarrito : routerCarrito,
+    setUsername
 }

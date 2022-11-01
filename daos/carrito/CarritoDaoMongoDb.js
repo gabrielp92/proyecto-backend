@@ -11,7 +11,6 @@ class CarritoDaoMongoDb extends ContenedorMongoDb {
         this.id =  Math.floor(Math.random() * (this.timestamp - 1) + 1)
     }
 
-
     getIdCarrito()
     {
         return this.id

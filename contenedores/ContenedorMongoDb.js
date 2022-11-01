@@ -1,4 +1,5 @@
 const log4js = require('../log4js')
+
 class ContenedorMongoDb {
 
     constructor(model)
@@ -46,7 +47,7 @@ class ContenedorMongoDb {
             else
             {
                 productModel = new this.model(product);
-                product._id = (await this.model.find({"código": product.código},{"_id":1}))[0]._id;
+                product._id = (await this.model.findOne({"código": product.código},{"_id":1}))[0]._id;
             }
             await productModel.save()
             this.products.push(product)

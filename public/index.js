@@ -120,6 +120,8 @@ function agregarCardsProductos(data){
 }
 
 function cargarProductos(){
+
+  console.log('desde cargarProductos')
   fetch('/dataProductos', {method:'GET'})
     .then(data => data.json())
     .then(d => {
