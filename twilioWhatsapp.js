@@ -1,7 +1,8 @@
+require('dotenv').config()
 const twilio = require('twilio')
 
-const accountSID = 'AC3c05cf93de2229614911f83015b5bebe'
-const authToken = 'f7d177d1aa543385972b976067d133f6'
+const accountSID = process.env.ACCOUNTSID
+const authToken = process.env.AUTHTOKEN
 
 const phoneServer = '+14155238886'
 const phoneAdmin = '+5492932441606'

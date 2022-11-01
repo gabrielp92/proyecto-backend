@@ -1,3 +1,4 @@
+require('dotenv').config()
 const { createTransport } = require('nodemailer');
 const ejs = require('ejs')
 const mailAdmin = 'gpaez1992@gmail.com'
@@ -7,7 +8,7 @@ const transporter = createTransport({
     port: 465,
     auth: {
         user: mailAdmin,
-        pass: 'vsmccysixhmgqvjj'
+        pass: process.env.GMAILPASS
     }
 });
 
