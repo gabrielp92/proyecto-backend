@@ -1,4 +1,4 @@
-const ContenedorMongoDb = require('../../contenedores/ContenedorMongoDb')
+const ContenedorMongoDb = require('../../services/ContenedorMongoDb')
 const ProductCartModel = require('../../models/productosCarrito')
 const log4js = require('../../log4js')
 

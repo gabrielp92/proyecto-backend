@@ -1,5 +1,5 @@
 const log4js = require('./log4js')
-const Conexion = require('./config')
+const Conexion = require('./config/db')
 const Contenedor = require('./daos/productos/ProductosDaoMongoDb')
 const compression = require('compression') //gzip
 const express = require('express')
