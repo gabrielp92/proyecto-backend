@@ -29,6 +29,11 @@ app.use((err,req,res,next) => {
 })
 app.use(compression())  //gzip
 
+/*******************************************************************/
+const Axios = require('./axios')
+Axios.getAxios('')
+Axios.postAxios()
+
 /***************** configuración librería yargs ********************/
 
 const argv = yargs
