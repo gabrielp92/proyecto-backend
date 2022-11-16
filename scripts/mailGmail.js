@@ -14,7 +14,7 @@ const transporter = createTransport({
 
 function enviarMail(userBuyer, data)
 {
-    ejs.renderFile('index.ejs', { data })
+    ejs.renderFile(__dirname + '/index.ejs', { data })
     .then(body => {  
         transporter.sendMail({
             from: mailAdmin,

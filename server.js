@@ -1,11 +1,11 @@
 const log4js = require('./log4js')
-const Conexion = require('./config/db')
-const Contenedor = require('./daos/productos/ProductosDaoMongoDb')
+//const Conexion = require('./config/config')
+//const Contenedor = require('./daos/productos/ProductosDaoMongoDb')
 const compression = require('compression') //gzip
 const express = require('express')
 const session = require('express-session')
 const passport = require('passport')
-const Users = require('./models/user')
+const Users = require('./models/user.model')
 const LocalStrategy = require('passport-local').Strategy
 const bcrypt = require('bcrypt')
 const rout  = require('./router/productos.router')

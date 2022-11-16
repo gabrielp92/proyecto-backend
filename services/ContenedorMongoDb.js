@@ -1,4 +1,5 @@
 const log4js = require('../log4js')
+const ProductoDTO = require('../dto/producto.dto')
 
 class ContenedorMongoDb {
 
@@ -56,18 +57,22 @@ class ContenedorMongoDb {
             log4js.loggerError.error(`${error}`)
             throw error
         }
-        return product._id
+        //return product._id
+        return new ProductoDTO(product)._id
     }
 
     getById(id)
     {  
         const product = this.products.find(p => p._id == id)
-        return product ? product : null
+        //return product ? new product : null
+        return product ? new ProductoDTO(product) : null
     }
 
     getAll()
     {
-        return this.products
+        //return this.products
+        const productsResult = this.products.map(p => new ProductoDTO(p))
+        return productsResult
     }
 
     async deleteById(id)
@@ -77,7 +82,9 @@ class ContenedorMongoDb {
         {
             this.products.splice(index,1);
             try {
-                await this.model.deleteOne({"_id":id})
+                //await this.model.deleteOne({"_id":id})
+                const productDeleted = await this.model.deleteOne({"_id":id})
+                return new ProductoDTO(productDeleted)
             }
             catch(error) {
                 log4js.loggerError.error('error al intentar eliminar documento de la BD')
@@ -111,7 +118,7 @@ class ContenedorMongoDb {
             product.precio = newProduct.precio
             product.foto = newProduct.foto;
     
-            await this.model.updateOne({"_id": product._id},
+            const productUpdated = await this.model.updateOne({"_id": product._id},
             { 
                 $set: 
                 {  
@@ -124,6 +131,8 @@ class ContenedorMongoDb {
                     "foto": product.foto
                  }
             })
+
+            return new ProductoDTO(productUpdated)
 
         }
         catch(error) {
