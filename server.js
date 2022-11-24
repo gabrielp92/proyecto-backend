@@ -30,6 +30,16 @@ app.use((err,req,res,next) => {
 app.use(compression())  //gzip
 
 /*******************************************************************/
+const {graphqlHTTP} = require('express-graphql')
+const schemaStudent = require('./schema/schemaStudent')
+const resolvers = require('./resolvers/student')
+
+app.use('/graphql', graphqlHTTP({
+    schema: schemaStudent,
+    rootValue: resolvers
+}))
+
+/*******************************************************************/
 const Axios = require('./axios')
 Axios.getAxios('')
 Axios.postAxios()
