@@ -40,13 +40,14 @@ class ContenedorMongoDb {
     { 
         try{               
             let productModel;
-            if(product.toObject().hasOwnProperty('_id'))
-            {
+            //if(product.toObject().hasOwnProperty('_id'))
+            if(product._id == undefined)
+            {   
                 productModel = new this.model(product);
                 productModel.isNew = true;
             }
             else
-            {
+            { 
                 productModel = new this.model(product);
                 product._id = (await this.model.findOne({"código": product.código},{"_id":1}))[0]._id;
             }
@@ -71,7 +72,7 @@ class ContenedorMongoDb {
     getAll()
     {
         //return this.products
-        const productsResult = this.products.map(p => new ProductoDTO(p))
+        const productsResult = this.products.map(p => {return new ProductoDTO(p)})
         return productsResult
     }
 
