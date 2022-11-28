@@ -31,12 +31,13 @@ app.use(compression())  //gzip
 
 /*******************************************************************/
 const {graphqlHTTP} = require('express-graphql')
-const schemaStudent = require('./schema/schemaStudent')
-const resolvers = require('./resolvers/student')
+const schemaProduct = require('./schema/schemaProduct')
+const resolvers = require('./controllers/graphqlProductos.controller')
 
 app.use('/graphql', graphqlHTTP({
-    schema: schemaStudent,
-    rootValue: resolvers
+    schema: schemaProduct,
+    rootValue: resolvers,
+    graphiql: true
 }))
 
 /*******************************************************************/
