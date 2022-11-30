@@ -2,7 +2,7 @@ class ProductoDTO{
     constructor(data){
         this.nombre = data.nombre
         this.descripcion = data.descripcion
-        this.código = data.código
+        this.codigo = data.codigo
         this.stock = data.stock
         this.precio = data.precio
         this.foto = data.foto

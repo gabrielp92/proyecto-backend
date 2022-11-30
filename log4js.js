@@ -23,16 +23,6 @@ log4js.configure({
 */
 
 /*
-const logger = log4js.getLogger('console')
-logger.trace('agarramos una cerveza')
-logger.debug('La cerveza es Corona')
-logger.info('La cerveza está fría')
-logger.warn('La cerveza está caliente')
-logger.error('La cerveza se cayó')
-logger.fatal('No hay cerveza')*/
-
-
-/*
 const typeLog = (process.env.NODE_ENV == 'production') ? 'prod' : 'console'
 const logger2 = log4js.getLogger(typeLog)
 */

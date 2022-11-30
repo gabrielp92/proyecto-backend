@@ -5,30 +5,30 @@ const schemaProduct = buildSchema(`
     type ProductoDTO {
         nombre : String,
         descripcion : String,
-        código : Int,
+        codigo : Int,
         stock : Int,
         precio : Int,
         foto : String,
-        timestamp : Date,
+        timestamp : String,
         _id : ID!
     }
 
     input ProductoInput {
         nombre : String,
         descripcion : String,
-        código : Int,
+        codigo : Int,
         stock : Int,
         precio : Int,
         foto : String
     }
 
     type Query {
-        getProductController(id: ID): [ProductoDTO],  
+        getProductController(id: ID): [ProductoDTO]
     }
 
     type Mutation {
         postProductController(data: ProductoInput): ProductoDTO,
-        putProductController(id:ID!, data:ProductoInput) ProductoDTO,
+        putProductController(id:ID!, data:ProductoInput): ProductoDTO,
         deleteProductController(id:ID!): ProductoDTO
     }
 `)

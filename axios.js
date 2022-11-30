@@ -13,7 +13,7 @@ function postAxios(){
     {
         "nombre":"ProductoAxios",
         "descripcion":"desde post Axios",
-        "código":91028442,
+        "codigo":91028442,
         "stock":62,
         "precio":4844,
         "foto":"https://icdn.dtcn.com/image/digitaltrends_es/macbook-m1-01-768x512.jpg"

@@ -49,7 +49,7 @@ class ContenedorMongoDb {
             else
             { 
                 productModel = new this.model(product);
-                product._id = (await this.model.findOne({"código": product.código},{"_id":1}))[0]._id;
+                product._id = (await this.model.findOne({"codigo": product.codigo},{"_id":1}))[0]._id;
             }
             await productModel.save()
             this.products.push(product)
@@ -114,7 +114,7 @@ class ContenedorMongoDb {
             product.timestamp = Date.now()
             product.nombre = newProduct.nombre
             product.descripcion = newProduct.descripcion
-            product.código = newProduct.código
+            product.codigo = newProduct.codigo
             product.stock = newProduct.stock
             product.precio = newProduct.precio
             product.foto = newProduct.foto;
@@ -126,7 +126,7 @@ class ContenedorMongoDb {
                     "timestamp": product.timestamp,
                     "nombre": product.nombre,
                     "descripcion": product.descripcion,
-                    "código": product.código,
+                    "codigo": product.codigo,
                     "stock": product.stock,
                     "precio": product.precio,
                     "foto": product.foto

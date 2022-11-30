@@ -13,7 +13,7 @@ describe('Test de integracion de contenedorProductos', function() {
         contenedor.save({
                 "nombre":"ProductoTest",
                 "descripcion":"desde Test",
-                "código":91075856062,
+                "codigo":91075856062,
                 "stock":22,
                 "precio":475,
                 "foto":"https://icdn.dtcn.com/image/digitaltrends_es/macbook-m1-01-768x512.jpg"

@@ -35,7 +35,7 @@ function oyenteButtonActualizar(e, producto)
   let prodActualizado = {
     "nombre": document.getElementById(`card${producto._id}nombre`).innerText,
     "descripcion": document.getElementById(`card${producto._id}descripcion`).innerText,
-    "código": parseInt(document.getElementById(`card${producto._id}código`).innerText),
+    "codigo": parseInt(document.getElementById(`card${producto._id}codigo`).innerText),
     "stock": parseInt(document.getElementById(`card${producto._id}stock`).innerText),
     "precio": parseFloat(document.getElementById(`card${producto._id}precio`).innerText),
     "foto": producto.foto
@@ -93,7 +93,7 @@ function agregarCard(data){
           <p id="card${data._id}descripcion" class="card-text mb-0" contenteditable="${isAdmin}">${data.descripcion}</p>
           <i>Stock:</i><i id="card${data._id}stock" contenteditable="${isAdmin}">${data.stock}</i>
           ${buttonsCard}
-          Cód:<span id="card${data._id}código" contenteditable="${isAdmin}">${data.código}</span> <b>Id:${data._id}</b>
+          Cód:<span id="card${data._id}codigo" contenteditable="${isAdmin}">${data.codigo}</span> <b>Id:${data._id}</b>
         </div>
       </div>
     </div>
@@ -155,7 +155,7 @@ function agregarCardAlCarrito(producto)
         <b class="card-text">$${producto.precio}</b>
         <p class="card-text mb-0">${producto.descripcion}</p>
         <i>Stock:${producto.stock}</i>
-        <span>Cód:${producto.código}</span>
+        <span>Cód:${producto.codigo}</span>
       </div>
     </div>
   </div>
