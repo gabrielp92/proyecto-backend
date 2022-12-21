@@ -1,5 +1,5 @@
 const res = require('express/lib/response')
-const log4js = require('../log4js')
+const log4js = require('../config/log4js')
 let username = undefined;
 
 /*

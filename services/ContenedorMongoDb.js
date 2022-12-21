@@ -1,4 +1,4 @@
-const log4js = require('../log4js')
+const log4js = require('../config/log4js')
 const ProductoDTO = require('../dto/producto.dto')
 
 class ContenedorMongoDb {
@@ -26,7 +26,7 @@ class ContenedorMongoDb {
             .then( documents => {
                 for(const document of documents) {
                     this.products.push(document)
-                    console.log('carga producto')
+                    log4js.loggerInfo.info('carga producto')
                     console.log(document)
                 }
             })
@@ -40,17 +40,8 @@ class ContenedorMongoDb {
     { 
         try{               
             let productModel;
-            //if(product.toObject().hasOwnProperty('_id'))
-            if(product._id == undefined)
-            {   
-                productModel = new this.model(product);
-                productModel.isNew = true;
-            }
-            else
-            { 
-                productModel = new this.model(product);
-                product._id = (await this.model.findOne({"codigo": product.codigo},{"_id":1}))[0]._id;
-            }
+            productModel = new this.model(product);
+            productModel.isNew = true;
             await productModel.save()
             this.products.push(product)
         } 

@@ -1,8 +1,8 @@
-const log4js = require('../log4js')
+const log4js = require('../config/log4js')
 const rout = require('./productos.controller')
 const CarritoDaoMongoDb = require('../daos/carrito/CarritoDaoMongoDb');
 const mailGmail = require('../scripts/mailGmail')
-const twilioWhatsapp = require('../scripts/twilioWhatsapp')
+const OrdenModel = require('../models/orden.model')
 let username = undefined;
 let contenedorCarrito = CarritoDaoMongoDb.getInstance() //patrón singleton
 
@@ -56,7 +56,7 @@ function postCargarCarritoPorIdController(req,res){
     {       
         const producto = rout.contenedor.getById(req.body.productoId)
         if(producto != null)
-        {   console.log('entré en cargarCarritoPorId')
+        {   log4js.loggerInfo.info('entré en cargarCarritoPorIdController')
             console.log(producto)
             contenedorCarrito.save(producto)
             .then(() => res.redirect('/'))
@@ -118,16 +118,40 @@ function setUsername(nombre)
     username = nombre
 }
 
+function generarOrden(productosEnCarrito, user)
+{
+    let strItems = ""
+    productosEnCarrito.forEach(prodCarrito => {
+        strItems += `${prodCarrito.nombre}(${prodCarrito.descripcion}) $${prodCarrito.precio} -`
+    });
+
+    let cantOrders = 0;
+    OrdenModel.estimatedDocumentCount((err, numOfDocs) => {
+        if(err) throw(err);
+        cantOrders = numOfDocs
+      });
+    
+    cantOrders += 1;
+    const orden = {
+        items: strItems,
+        numero: cantOrders,
+        email: user
+    }
+    let modeloOrden = new OrdenModel(orden);
+    modeloOrden.save();
+    return orden;
+}
+
 function postFinalizarCompra(req,res){
     log4js.loggerInfo.info(`Ruta: ${req.originalUrl} - Método: ${req.method}`)
     const productosEnCarrito = contenedorCarrito.getAll(contenedorCarrito.getIdCarrito())
     if(productosEnCarrito.length != 0)
     {
         console.log('username: ' + username)
-        mailGmail.enviarMail(username, productosEnCarrito)
-        twilioWhatsapp.enviarWhatsapp(username)
+        const orden = generarOrden(productosEnCarrito, username)
+        mailGmail.enviarMail(username, productosEnCarrito, orden)
     }
-    res.json('Compra realizada exitosamente')
+    res.json('Compra realizada exitosamente!')
 }
 
 module.exports = {

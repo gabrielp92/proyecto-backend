@@ -1,4 +1,4 @@
-const log4js = require('./log4js')
+const log4js = require('./config/log4js')
 //const Conexion = require('./config/config')
 //const Contenedor = require('./daos/productos/ProductosDaoMongoDb')
 const compression = require('compression') //gzip
@@ -28,22 +28,6 @@ app.use((err,req,res,next) => {
     res.status(500).send('Hubo algún error')
 })
 app.use(compression())  //gzip
-
-/*******************************************************************/
-const {graphqlHTTP} = require('express-graphql')
-const schemaProduct = require('./schema/schemaProduct')
-const resolvers = require('./controllers/graphqlProductos.controller')
-
-app.use('/graphql', graphqlHTTP({
-    schema: schemaProduct,
-    rootValue: resolvers,
-    graphiql: true
-}))
-
-/*******************************************************************/
-const Axios = require('./axios')
-Axios.getAxios('')
-Axios.postAxios()
 
 /***************** configuración librería yargs ********************/
 

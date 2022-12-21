@@ -1,6 +1,6 @@
 const ContenedorMongoDb = require('../../services/ContenedorMongoDb')
 const ProductCartModel = require('../../models/productosCarrito.model')
-const log4js = require('../../log4js')
+const log4js = require('../../config/log4js')
 const ProductsFactoryDAO = require('../factory')
 
 let instance = null
@@ -24,7 +24,7 @@ class CarritoDaoMongoDb extends ContenedorMongoDb {
             instance = new CarritoDaoMongoDb();
             (async function(){
                 await instance.init()
-                console.log('carrito creado')
+                log4js.loggerInfo.info('carrito creado')
             })();
         }
         return instance

@@ -12,9 +12,10 @@ const transporter = createTransport({
     }
 });
 
-function enviarMail(userBuyer, data)
+function enviarMail(userBuyer, data, dataOrden)
 {
-    ejs.renderFile(__dirname + '/index.ejs', { data })
+    console.log(dataOrden.numero)
+    ejs.renderFile(__dirname + '/index.ejs', { data, dataOrden })
     .then(body => {  
         transporter.sendMail({
             from: mailAdmin,
