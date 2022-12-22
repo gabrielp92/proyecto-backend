@@ -57,18 +57,21 @@ passport.use('signup', new LocalStrategy(
                 console.log('Error signup')
                 return done(err)
             }
-            if(user)
-            {
+            if(user) {
                 console.log('User already exists')
                 return done(null,false)
             }
-            const newUser = { username: username, password: createHash(password) }
+            if(password != req.body.repassword){
+                console.log('las contraseñas no coinciden')
+                return done(err)
+            }
+            const newUser = { name: req.body.name, lastname: req.body.lastname, phone: req.body.phone, username: username, password: createHash(password) }
             Users.create(newUser, (err,userWithID) => {
                 if(err) 
                     return done(err) 
                 console.log('User registration successfull!', userWithID)
                 return done(null, userWithID)
-            })      
+            })    
         })
     }
 ))
@@ -157,7 +160,6 @@ app.get('/dataProductos', (req,res) => {
         const productos = rout.contenedor.getAll()
         res.json({productos, isAdmin, username})
     } 
-    console.log('dataproductos')
 })
 
 app.post('/cargarProductos', (req,res) => {

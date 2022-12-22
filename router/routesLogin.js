@@ -1,7 +1,7 @@
 const res = require('express/lib/response')
 const log4js = require('../config/log4js')
+const mailGmail = require('../scripts/mailGmail')
 let username = undefined;
-
 
 /*
 function getRoot(req,res){
@@ -44,6 +44,7 @@ function postSignup(req,res){
     log4js.loggerInfo.info(`Ruta: ${req.originalUrl} - Método: ${req.method}`)
     log4js.loggerInfo.info('User registrado!')
     req.session.username = req.user.username
+    mailGmail.enviarMailSignup(req.user)
     res.redirect('/login')
 }
 

@@ -14,7 +14,6 @@ const transporter = createTransport({
 
 function enviarMail(userBuyer, data, dataOrden)
 {
-    console.log(dataOrden.numero)
     ejs.renderFile(__dirname + '/index.ejs', { data, dataOrden })
     .then(body => {  
         transporter.sendMail({
@@ -28,6 +27,22 @@ function enviarMail(userBuyer, data, dataOrden)
     })
 }
 
+function enviarMailSignup(data)
+{
+    ejs.renderFile(__dirname + '/indexSignup.ejs', { data })
+    .then(body => {  
+        transporter.sendMail({
+            from: mailAdmin,
+            to: [mailAdmin],
+            subject: `Nuevo usuario registrado: ${data.username}`,
+            html: body
+        })
+            .then(r => console.log(r))
+            .catch(e => console.log(e))
+    })
+}
+
 module.exports = {
-    enviarMail
+    enviarMail,
+    enviarMailSignup
 }
