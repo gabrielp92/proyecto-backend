@@ -1,6 +1,4 @@
 const log4js = require('./config/log4js')
-//const Conexion = require('./config/config')
-//const Contenedor = require('./daos/productos/ProductosDaoMongoDb')
 const compression = require('compression') //gzip
 const express = require('express')
 const session = require('express-session')
@@ -21,7 +19,7 @@ app.use(express.urlencoded({extended: true}))
 app.use('/api/productos', rout.routerProducts)
 app.use('/api/carrito', routCarrito.routerCarrito)
 //app.use('/static', express.static(__dirname + '/public'))
-app.use(express.static(__dirname + '/public'))
+app.use(express.static(__dirname + '/public')) 
 //app.use(express.static('/public'))
 //app.use('/uploads', express.static('uploads'))
 app.use((err,req,res,next) => {
@@ -139,16 +137,17 @@ app.get('/failsignup', routesLogin.getFailSignup)
 
 app.get('/logout', routesLogin.getLogout)
 
-app.get('/', (req,res) => {
-    log4js.loggerInfo.info(`Ruta: ${req.url} - Método: ${req.method}`)
-    if(req.isAuthenticated())
-        res.sendFile(__dirname + '/public/index.html')
-    else
-        res.sendFile(__dirname + '/public/login.html')
-})
 
-app.get('/heroku', (req,res) => {
-    res.send('Hola Node.js desde Heroku')
+app.get('/', (req,res) => {
+    log4js.loggerInfo.info(`Ruta: ${req.originalUrl} - Método: ${req.method}`)
+    if(req.isAuthenticated())
+    {
+        res.sendFile(__dirname + '/public/index.html')
+    }
+    else
+    {
+        res.sendFile(__dirname + '/public/login.html')
+    }
 })
 
 app.get('/dataProductos', (req,res) => {
@@ -157,7 +156,8 @@ app.get('/dataProductos', (req,res) => {
         const username = req.session.username
         const productos = rout.contenedor.getAll()
         res.json({productos, isAdmin, username})
-    }
+    } 
+    console.log('dataproductos')
 })
 
 app.post('/cargarProductos', (req,res) => {
@@ -166,35 +166,6 @@ app.post('/cargarProductos', (req,res) => {
         .catch(() => res.send('Error al guardar producto'))
 })
 
-app.get('/api/randoms', (req,res) => {
-
-    log4js.loggerInfo.info(`Ruta: ${req.url} - Método: ${req.method}`)
-    const calculoRandoms = fork('./router/randoms')
-    const cant = parseInt(req.query.cant)
-    const strMessage = `Servidor express (NGINX) en puerto ${PORT} - <b>PID: ${process.pid}<b>`
-    console.log(req.query.cant)
-    console.log(cant)
-    if(req.query.cant == undefined)
-    {
-        //se calculan 100.000.000 de números aleatorios
-        calculoRandoms.send(100000000)
-        res.send(strMessage) 
-    }
-    else
-        if(!isNaN(cant))
-        {   
-            if(cant > 0)
-            {
-                calculoRandoms.send(cant)
-                res.send(strMessage)
-            }
-            else
-            {
-                console.log('Error: La cantidad ingresada de números aleatorios a calcular es menor o igual a 1')  
-                res.send('Error: La cantidad ingresada de números aleatorios a calcular es menor o igual a 1')  
-            }   
-        }
-})
 
 //rutas inexistentes en el server
 app.get('/*', (req, res) => {

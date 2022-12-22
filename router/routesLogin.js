@@ -2,6 +2,7 @@ const res = require('express/lib/response')
 const log4js = require('../config/log4js')
 let username = undefined;
 
+
 /*
 function getRoot(req,res){
     log4js.loggerInfo.info(`Ruta: ${req.originalUrl} - Método: ${req.method}`)
@@ -9,7 +10,7 @@ function getRoot(req,res){
     if(req.isAuthenticated()) 
         res.sendFile(strHTML + "public\\index.html")
     else
-        res.redirect('/login')
+    res.sendFile(strHTML + "public\\login.html")
 }*/
 
 function getLogin(req,res){
