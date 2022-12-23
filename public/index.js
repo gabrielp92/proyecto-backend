@@ -4,6 +4,8 @@ crearOyenteBtnLogout();
 cargarProductos();
 cargarCarrito();
 
+/****************************************************************************/
+
 function crearOyenteBtnLogout(){
   const buttonLogout = document.getElementById('btnLogout')
   buttonLogout.onclick = (e) => {oyenteButtonLogout(e)}

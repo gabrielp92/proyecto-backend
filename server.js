@@ -10,17 +10,31 @@ const rout  = require('./router/productos.router')
 const routCarrito =  require('./router/carrito.router')
 const routesLogin = require('./router/routesLogin')
 const yargs = require('yargs')(process.argv.slice(2))
+
+const http = require('http')
+const { Server } = require('socket.io')
+
 const { fork } = require('child_process')
 const cluster = require('cluster')
 const numCPUs = require('os').cpus().length
 const app = express()
+
+
+const server = http.createServer(app)
+const io = new Server(server) //servidor de web socket
+
+
+app.set('views', './views')
+app.set('view engine', 'ejs')
+
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use('/api/productos', rout.routerProducts)
 app.use('/api/carrito', routCarrito.routerCarrito)
-//app.use('/static', express.static(__dirname + '/public'))
-app.use(express.static(__dirname + '/public')) 
-//app.use(express.static('/public'))
+
+//app.use(express.static(__dirname + '/public')) 
+app.use(express.static('./public'))
+app.use('/public', express.static(__dirname + '/public'))
 //app.use('/uploads', express.static('uploads'))
 app.use((err,req,res,next) => {
     res.status(500).send('Hubo algún error')
@@ -126,6 +140,42 @@ app.use(session({
 
 app.use(passport.initialize())
 app.use(passport.session())
+
+/******************************* chat - websocket **************************/
+const MensajesDaoMongoDb = require('./daos/mensajes/MensajesDaoMongoDb')
+const contenedorChat = MensajesDaoMongoDb.getInstance()
+
+app.get('/chat', (req,res) => {
+    console.log('ingreso a /chat')
+    res.render('index')
+})
+
+app.get('/dataChat', (req,res) => {
+    console.log('en dataChat')
+    const data = contenedorChat.getAll()
+    res.json({data})
+})
+
+io.on('connection', (socket) => {
+    
+    socket.on('chat-in', data => {
+        const fecha = new Date().toLocaleDateString()
+        const hora = new Date().toLocaleTimeString()
+        const tipo = isAdmin ? 'sistema' : 'usuario'
+        const dataOut = {
+            mensaje : data.msn,
+            email : data.username,
+            fecha,
+            hora,
+            tipo
+        };
+        (async function(){
+            await contenedorChat.save(dataOut)
+        })();
+        io.sockets.emit('chat-out', dataOut)
+    })
+  
+})
 
 /******************************** rutas ********************************/
 //app.get('/', routesLogin.getRoot)

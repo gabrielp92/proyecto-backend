@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto Backend</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container">
+        <main>
+            <div class="row mt-3 mb-5">
+                <div class="col-md-7 col-lg-8 mt-4 bg-light pt-4 pb-4">
+                    <h2 class="mb-3 text-primary mt-3">Centro de Mensajes</h2>
+                    <form class="needs-validation" novalidate>
+                        <div class="input-group has-validation w-50">
+                            <input type="text" id="username" class="w-50 form-control" placeholder="tumail@gmail.com" aria-describedby="inputGroupPrepend" required>
+                            <div class="invalid-feedback">
+                                Por favor, ingrese su mail.    
+                            </div>
+                        </div>
+                        <hr>  
+                        <div id="chat" class="col-12 mt-1"></div>
+                        <div class="mt-2 d-flex flex-row gap-3">       
+                            <input type="text" id="msn" name="msn" class="w-75 form-control" placeholder="Ingrese un mensaje">
+                            <button type="submit" id="send" class="btn btn-primary">Enviar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="../public/indexChat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
+</html>
