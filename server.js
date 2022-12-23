@@ -10,32 +10,23 @@ const rout  = require('./router/productos.router')
 const routCarrito =  require('./router/carrito.router')
 const routesLogin = require('./router/routesLogin')
 const yargs = require('yargs')(process.argv.slice(2))
-
 const http = require('http')
 const { Server } = require('socket.io')
-
 const { fork } = require('child_process')
 const cluster = require('cluster')
 const numCPUs = require('os').cpus().length
 const app = express()
-
-
 const server = http.createServer(app)
 const io = new Server(server) //servidor de web socket
-
-
 app.set('views', './views')
 app.set('view engine', 'ejs')
-
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use('/api/productos', rout.routerProducts)
 app.use('/api/carrito', routCarrito.routerCarrito)
-
-//app.use(express.static(__dirname + '/public')) 
-app.use(express.static('./public'))
-app.use('/public', express.static(__dirname + '/public'))
-//app.use('/uploads', express.static('uploads'))
+app.use(express.static(__dirname + '/public')) 
+//app.use(express.static('./public'))
+//app.use('/public', express.static(__dirname + '/public'))
 app.use((err,req,res,next) => {
     res.status(500).send('Hubo algún error')
 })
@@ -146,12 +137,10 @@ const MensajesDaoMongoDb = require('./daos/mensajes/MensajesDaoMongoDb')
 const contenedorChat = MensajesDaoMongoDb.getInstance()
 
 app.get('/chat', (req,res) => {
-    console.log('ingreso a /chat')
     res.render('index')
 })
 
 app.get('/dataChat', (req,res) => {
-    console.log('en dataChat')
     const data = contenedorChat.getAll()
     res.json({data})
 })
@@ -218,7 +207,6 @@ app.post('/cargarProductos', (req,res) => {
         .catch(() => res.send('Error al guardar producto'))
 })
 
-
 //rutas inexistentes en el server
 app.get('/*', (req, res) => {
     log4js.loggerWarning.warn(`Ruta: ${req.originalUrl} - Método: ${req.method}`)
@@ -265,7 +253,7 @@ else {
         res.send(info)
     })
 
-    const server = app.listen(PORT, () => {
+    server.listen(PORT, () => {
         console.log(`Servidor express escuchando en el puerto [${PORT}] - PID WORKER ${process.pid}`)
     })
     server.on('error', e => console.log('error en el server. ',e))

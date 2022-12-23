@@ -1,5 +1,5 @@
-const socket = io()
-loadFirstDataChat()
+const socket = io();
+loadFirstDataChat();
 
 const btnSend = document.getElementById('send')
 btnSend.onclick = e => {
